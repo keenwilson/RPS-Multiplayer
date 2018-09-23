@@ -1,0 +1,14 @@
+#game-area {
+    background-image: url("../images/kid-walking-on-the-rock.jpg");
+    background-size: 100%;
+    background-repeat: no-repeat;
+}
+
+#player-1-rock,
+#player-1-paper,
+#player-1-scissors,
+#player-2-rock,
+#player-2-paper,
+#player-2-scissors  {
+    cursor: pointer;
+}

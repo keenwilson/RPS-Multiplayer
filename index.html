@@ -19,6 +19,143 @@
 </head>
 
 <body>
+    <!-- Header -->
+    <section id="game-area" class="hero is-small is-primary">
+        <div class="hero-body">
+            <div class="container">
+                <h1 class="title">
+                    Rock-Paper-Scissors
+                </h1>
+                <h2 class="subtitle">
+                    An Online Multiplayer Decision Makering Game
+                </h2>
+
+                <div class="field is-grouped column is-3">
+                    <p class="control is-expanded">
+                        <input id="player-name" class="input" type="text" placeholder="Player Name">
+                    </p>
+                    <p class="control">
+                        <a id="start-game" class="button is-primary">
+                            Start
+                        </a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Game Area -->
+    <section class="section level">
+        <div class="container">
+
+            <div class="column is-three-fifths is-offset-one-fifth">
+                    <div id="game-notification" class="notification is-primary">
+                            <button class="delete"></button>
+                             <!-- Game's Message to the Player -->
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit lorem ipsum dolor sit amet, consectetur adipiscing elit
+                        </div>
+            </div>
+
+            <div class="columns">
+                <div class="column">
+                    <!-- First column -->
+                    <div class="box">
+                        <p id="player-1-name" class="title">
+                            <!-- Player 1's Name -->
+                        </p>
+
+                        <div id="player-1-choices" class="columns">
+                            <!-- Rock, Paper, Scissors for Player 1 -->
+                            <div id="player-1-rock" class="column is-mobile">
+                                <figure class="icon is-square">
+                                    <img src="assets/images/icon-rock.png" alt="rock">
+                                </figure>
+                                <span> Rock</span>
+                            </div>
+                            <div id="player-1-paper" class="column is-mobile">
+                                <figure class="icon is-square">
+                                    <img src="assets/images/icon-paper.png" alt="paper">
+                                </figure>
+                                <span> Paper</span>
+                            </div>
+                            <div id="player-1-scissors" class="column is-mobile">
+                                <figure class="icon is-square">
+                                    <img src="assets/images/icon-scissors.png" alt="scissors">
+                                </figure>
+                                <span> Scissors</span>
+                            </div>
+                        </div>
+                        <p id="player-1-game-result" class="subtitie">
+                            <!-- Player 1's Game Result Display -->
+                        </p>
+                        <p id="player-1-stat" class="subtitle">
+                            <!-- Player 1's Wins and Losses -->
+                        </p>
+                    </div>
+                </div>
+                <div class="column">
+                    <!-- Second column -->
+                    <div class="box">
+                        <p id="center-game-result" class="subtitie">
+                            <!-- Game Result Display in the center -->
+                        </p>
+                    </div>
+                </div>
+                <div class="column">
+                    <!-- Third column -->
+                    <div class="box">
+                        <p id="player-2-name" class="title">
+                            <!-- Player 2's Name -->
+                        </p>
+                        <div id="player-2-choices" class="columns">
+                            <!-- Player 2's Choices -->
+
+                            <div id="player-2-rock" class="column is-mobile">
+                                <figure class="icon is-square">
+                                    <img src="assets/images/icon-rock.png" alt="rock">
+                                </figure>
+                                <span> Rock</span>
+                            </div>
+                            <div id="player-2-paper" class="column is-mobile">
+                                <figure class="icon is-square">
+                                    <img src="assets/images/icon-paper.png" alt="paper">
+                                </figure>
+                                <span> Paper</span>
+                            </div>
+                            <div id="player-2-scissors" class="column is-mobile">
+                                <figure class="icon is-square">
+                                    <img src="assets/images/icon-scissors.png" alt="scissors">
+                                </figure>
+                                <span> Scissors</span>
+                            </div>
+
+                        </div>
+                        <p id="player-1-game-result" class="subtitie">
+                            <!-- Player 2's Game Result Display -->
+                        </p>
+                        <p id="player-2-stat" class="subtitle">
+                            <!-- Player 2's Wins and Losses -->
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+            <!-- Chat Box -->
+            <div class="column is-three-fifths is-offset-one-fifth">
+                <div class="field">
+                    <div class="control">
+                        <textarea id="chat-display" class="textarea is-primary" type="text" placeholder=""></textarea>
+                        <div class="field has-addons">
+                            <input id="chat-input" class="input is-primary" type="text" placeholder="Type your message here">
+                            <div class="control"></div>
+                            <a class="button is-primary is-outlined">Send</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+    </section>
+
 
 
 
