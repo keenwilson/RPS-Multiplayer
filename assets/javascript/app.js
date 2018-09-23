@@ -30,30 +30,44 @@ var chat = "";
 // =============================================================
 
 // Click events for Start button
-$("#start-game").on("click", function () {
+$("#start-game").on("click", function (e) {
+    e.preventDefault();
     console.log("You've clicked a 'start'button.")
     var name = $("#player-name").val().trim();
     console.log(name);
 });
 
 // Click events for Rock, Paper, Scissors
-$("#player-1-rock").on("click", function () {
+$("#player-1-rock").on("click", function (e) {
+    e.preventDefault();
     console.log("Player 1 clicked Rock.");
 });
-$("#player-1-paper").on("click", function () {
+$("#player-1-paper").on("click", function (e) {
+    e.preventDefault();
     console.log("Player 1 clicked Paper.");
 });
-$("#player-1-scissors").on("click", function () {
+$("#player-1-scissors").on("click", function (e) {
+    e.preventDefault();
     console.log("Player 1 clicked Scissors.");
 });
-$("#player-2-rock").on("click", function () {
+$("#player-2-rock").on("click", function (e) {
+    e.preventDefault();
     console.log("Player 2 clicked Rock.");
 });
-$("#player-2-paper").on("click", function () {
+$("#player-2-paper").on("click", function (e) {
+    e.preventDefault();
     console.log("Player 2 clicked Paper.");
 });
-$("#player-2-scissors").on("click", function () {
+$("#player-2-scissors").on("click", function (e) {
+    e.preventDefault();
     console.log("Player 2 clicked Scissors.");
 });
 
+// Function to handle chat
+// ===============================
+$("#send-chat").on("click", function (e) {
+    e.preventDefault();
+    var message = $("#chat-input").val().trim();
+    console.log("Send your message: " + message);
+});
 
