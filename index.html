@@ -15,7 +15,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css">
     <!-- Link Customized CSS -->
     <link rel="stylesheet" href="assets/css/style.css" type="text/css">
-
 </head>
 
 <body>
@@ -30,9 +29,9 @@
                     An Online Multiplayer Decision Makering Game
                 </h2>
 
-                <div class="field is-grouped column is-3">
+                <div class="username-form field is-grouped column is-3">
                     <p class="control is-expanded">
-                        <input id="player-name" class="input" type="text" placeholder="Player Name">
+                        <input id="username" class="input" type="text" placeholder="Player Name">
                     </p>
                     <p class="control">
                         <a id="start-game" class="button is-primary">
@@ -48,11 +47,10 @@
         <div class="container">
 
             <div class="column is-three-fifths is-offset-one-fifth">
-                <div id="game-notification" class="notification is-primary">
+                <div class="notification is-primary">
                     <button class="delete"></button>
                     <!-- Game's Message to the Player -->
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit lorem ipsum dolor sit amet, consectetur
-                    adipiscing elit
+                    <p class="game-notification">Welcome to Rock-Paper-Scissors. Just like when we play this game at the playground, you won't be able to play it alone. So, be sure to grab a friend (or a second browser tab!). </p>
                 </div>
             </div>
 
@@ -60,35 +58,35 @@
                 <div class="column">
                     <!-- First column -->
                     <div class="box">
-                        <p id="player-1-name" class="title">
+                        <p class="player-name-1 title">
                             <!-- Player 1's Name -->
                         </p>
 
-                        <div id="player-1-choices" class="columns">
+                        <div class="player-1-choices columns">
                             <!-- Rock, Paper, Scissors for Player 1 -->
-                            <div id="player-1-rock" class="column is-mobile">
+                            <div id="player-rock-1" class="column is-mobile">
                                 <figure class="icon is-square">
                                     <img src="assets/images/icon-rock.png" alt="rock">
                                 </figure>
                                 <span> Rock</span>
                             </div>
-                            <div id="player-1-paper" class="column is-mobile">
+                            <div id="player-paper-1" class="column is-mobile">
                                 <figure class="icon is-square">
                                     <img src="assets/images/icon-paper.png" alt="paper">
                                 </figure>
                                 <span> Paper</span>
                             </div>
-                            <div id="player-1-scissors" class="column is-mobile">
+                            <div id="player-scissors-1" class="column is-mobile">
                                 <figure class="icon is-square">
                                     <img src="assets/images/icon-scissors.png" alt="scissors">
                                 </figure>
                                 <span> Scissors</span>
                             </div>
                         </div>
-                        <p id="player-1-game-result" class="subtitie">
+                        <p class="player-game-result-1 subtitie">
                             <!-- Player 1's Game Result Display -->
                         </p>
-                        <p id="player-1-stat" class="subtitle">
+                        <p class="player-stat-1 subtitle">
                             <!-- Player 1's Wins and Losses -->
                         </p>
                     </div>
@@ -98,31 +96,34 @@
                     <div class="box">
                         <p id="center-game-result" class="subtitie">
                             <!-- Game Result Display in the center -->
+                            <p class="turn title">
+                                    <!-- Turns:  -->
+                            </p>
                         </p>
                     </div>
                 </div>
                 <div class="column">
                     <!-- Third column -->
                     <div class="box">
-                        <p id="player-2-name" class="title">
+                        <p class="player-name-2 title">
                             <!-- Player 2's Name -->
                         </p>
-                        <div id="player-2-choices" class="columns">
+                        <div class="player-choices-2 columns">
                             <!-- Player 2's Choices -->
 
-                            <div id="player-2-rock" class="column is-mobile">
+                            <div id="player-rock-2" class="column is-mobile">
                                 <figure class="icon is-square">
                                     <img src="assets/images/icon-rock.png" alt="rock">
                                 </figure>
                                 <span> Rock</span>
                             </div>
-                            <div id="player-2-paper" class="column is-mobile">
+                            <div id="player-paper-2" class="column is-mobile">
                                 <figure class="icon is-square">
                                     <img src="assets/images/icon-paper.png" alt="paper">
                                 </figure>
                                 <span> Paper</span>
                             </div>
-                            <div id="player-2-scissors" class="column is-mobile">
+                            <div id="player-scissors-2" class="column is-mobile">
                                 <figure class="icon is-square">
                                     <img src="assets/images/icon-scissors.png" alt="scissors">
                                 </figure>
@@ -130,10 +131,10 @@
                             </div>
 
                         </div>
-                        <p id="player-1-game-result" class="subtitie">
+                        <p class="player-game-result-2 subtitie">
                             <!-- Player 2's Game Result Display -->
                         </p>
-                        <p id="player-2-stat" class="subtitle">
+                        <p class="player-stat-2 subtitle">
                             <!-- Player 2's Wins and Losses -->
                         </p>
                     </div>
@@ -141,7 +142,7 @@
 
             </div>
             <!-- Chat Box -->
-            <div class="column is-three-fifths is-offset-one-fifth">
+            <div id="chat-box" class="column is-three-fifths is-offset-one-fifth">
                 <div class="field">
                     <form class="control" action="#" method="post">
                         <textarea id="chat-display" class="textarea is-primary" type="text" placeholder=""></textarea>
@@ -168,9 +169,11 @@
     <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
         crossorigin="anonymous"></script>
     <!-- Link Firebase -->
-    <script src="https://www.gstatic.com/firebasejs/5.5.1/firebase.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.5.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.5.1/firebase-database.js"></script>
     <!-- Link JavaScript -->
     <script src="assets/javascript/app.js"></script>
+    
 </body>
 
 </html>
