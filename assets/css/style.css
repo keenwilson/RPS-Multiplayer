@@ -12,3 +12,7 @@
 #player-2-scissors  {
     cursor: pointer;
 }
+
+textarea {
+    resize: none;
+  }

@@ -154,7 +154,16 @@ $("#send-chat").on("click", function (e) {
 
     // Clear chat input
     $("#chat-input").val("");
+    scrollToBottom();
 
+});
+
+
+// Disable 'enter' key from reloading a page
+$("#chat-input").keypress(function (e) {      
+    if (e.which == 13) {
+         e.preventDefault();
+    }
 });
 
 // Database listening function for chats.
@@ -162,13 +171,26 @@ firebase.database().ref('chat').on('child_added', function (snapshot) {
     var chatMessage = snapshot.val();
     //  update HTML elements.
     var chatDisplay = chatMessage.sender + ' : ' + chatMessage.message + '&#13;&#10;';
-    $("#chat-display").append(chatDisplay);
+    $(".chat-display").append(chatDisplay);
+    scrollToBottom();
 
     // Only show messages sent in the last half hour. A simple workaround for not having a ton of chat history.
     if (Date.now() - chatMessage.timestamp < 1800000) {
-
     }
-
 });
 
+// Find out when the content of the textarea changes 
+$(".chat-display").change(function() {
+    scrollToBottom();
+});
+// Scroll to the bottom of the chat box
+var messages = $('.chat-display');
+function scrollToBottom() {
+    messages[0].scrollTop = messages[0].scrollHeight;
+};
+scrollToBottom();
 
+// Prevent typing in chat box
+$(".chat-display").keypress(function(e) {
+    e.preventDefault();
+});
