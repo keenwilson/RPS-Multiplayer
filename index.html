@@ -50,7 +50,9 @@
                 <div class="notification is-primary">
                     <button class="delete"></button>
                     <!-- Game's Message to the Player -->
-                    <p class="game-notification">Welcome to Rock-Paper-Scissors. Just like when we play this game at the playground, you won't be able to play it alone. So, be sure to grab a friend (or a second browser tab!). </p>
+                    <p class="game-notification">Welcome to Rock-Paper-Scissors. Just like when we play this game at
+                        the playground, you won't be able to play it alone. So, be sure to grab a friend (or a second
+                        browser tab!). </p>
                 </div>
             </div>
 
@@ -61,22 +63,22 @@
                         <p class="player-name-1 title">
                             <!-- Player 1's Name -->
                         </p>
-
+                        <p class="waiting waiting-player-1 subtitle">Waiting for Player 1</p>
                         <div class="player-1-choices columns">
                             <!-- Rock, Paper, Scissors for Player 1 -->
-                            <div id="player-rock-1" class="column is-mobile">
+                            <div id="player-rock-1" data-choice="r" data-text="rock" role="button" class="column is-mobile">
                                 <figure class="icon is-square">
                                     <img src="assets/images/icon-rock.png" alt="rock">
                                 </figure>
                                 <span> Rock</span>
                             </div>
-                            <div id="player-paper-1" class="column is-mobile">
+                            <div id="player-paper-1" data-choice="s" data-text="scissors" role="button" class="column is-mobile">
                                 <figure class="icon is-square">
                                     <img src="assets/images/icon-paper.png" alt="paper">
                                 </figure>
                                 <span> Paper</span>
                             </div>
-                            <div id="player-scissors-1" class="column is-mobile">
+                            <div id="player-scissors-1" data-choice="s" data-text="scissors" role="button" class="column is-mobile">
                                 <figure class="icon is-square">
                                     <img src="assets/images/icon-scissors.png" alt="scissors">
                                 </figure>
@@ -89,17 +91,21 @@
                         <p class="player-stat-1 subtitle">
                             <!-- Player 1's Wins and Losses -->
                         </p>
+
                     </div>
                 </div>
                 <div class="column">
                     <!-- Second column -->
-                    <div class="box">
-                        <p id="center-game-result" class="subtitie">
+                    <div class="box center-game-result">
+
                             <!-- Game Result Display in the center -->
-                            <p class="turn title">
-                                    <!-- Turns:  -->
+                            <p class="turn subtitle">
+                                <!-- Turns:  -->
                             </p>
-                        </p>
+                            <p class="winner title">
+                                <!-- The Winner is :  -->
+                            </p>
+                        
                     </div>
                 </div>
                 <div class="column">
@@ -108,22 +114,23 @@
                         <p class="player-name-2 title">
                             <!-- Player 2's Name -->
                         </p>
+                        <p class="waiting waiting-player-2 subtitle">Waiting for Player 2</p>
                         <div class="player-choices-2 columns">
                             <!-- Player 2's Choices -->
 
-                            <div id="player-rock-2" class="column is-mobile">
+                            <div id="player-rock-2" data-choice="r" data-text="rock" role="button" class="column is-mobile">
                                 <figure class="icon is-square">
                                     <img src="assets/images/icon-rock.png" alt="rock">
                                 </figure>
                                 <span> Rock</span>
                             </div>
-                            <div id="player-paper-2" class="column is-mobile">
+                            <div id="player-paper-2" data-choice="p" data-text="paper" role="button" class="column is-mobile">
                                 <figure class="icon is-square">
                                     <img src="assets/images/icon-paper.png" alt="paper">
                                 </figure>
                                 <span> Paper</span>
                             </div>
-                            <div id="player-scissors-2" class="column is-mobile">
+                            <div id="player-scissors-2" data-choice="s" data-text="scissors" role="button" class="column is-mobile">
                                 <figure class="icon is-square">
                                     <img src="assets/images/icon-scissors.png" alt="scissors">
                                 </figure>
@@ -147,18 +154,19 @@
                     <form class="control" action="#" method="post">
                         <textarea class="chat-display textarea is-primary" type="text" placeholder="" autofocus></textarea>
                         <div class="field has-addons">
-                            <input id="chat-input" class="input is-primary" type="text" placeholder="Type your message here..." autofocus>
+                            <input id="chat-input" class="input is-primary" type="text" placeholder="Type your message here..."
+                                autofocus>
                             <div class="control">
-                                    <a id="send-chat" class="button is-primary is-outlined">Send</a>
-                            </div>                            
+                                <a id="send-chat" class="button is-primary is-outlined">Send</a>
+                            </div>
                         </div> <!-- End Field -->
                     </form>
-                </div> 
+                </div>
             </div> <!-- End Chat -->
         </div>
     </section>
 
-    <form action="#" method="post">
+
 
 
 
@@ -173,7 +181,7 @@
     <script src="https://www.gstatic.com/firebasejs/5.5.1/firebase-database.js"></script>
     <!-- Link JavaScript -->
     <script src="assets/javascript/app.js"></script>
-    
+
 </body>
 
 </html>
