@@ -38,6 +38,8 @@ $(document).ready(function () {
         ties: 0,
         choice: ""
     };
+    var hasWinner = false;
+
     // Whose turn is it (Player 1 or Player 2)
     var turn = "";
     // What Player1 and Player2 select (r, p, or s)
@@ -86,6 +88,8 @@ $(document).ready(function () {
             playerConnected.set(player);
             // Remove user from the connection list when they disconnect.
             database.ref("/players/").child(player.number).onDisconnect().remove();
+            // Clear selected r,p,s on the opponent database
+
 
 
 
@@ -130,8 +134,7 @@ $(document).ready(function () {
                 $(".player-name-1").text(player1name)
                 $(".waiting-player-1 ").hide();
                 $(".waiting-player-2 ").show();
-                $(".player-choices-1").hide();
-                $(".player-choices-2").hide();
+                hidePlayerChoices();
                 $playerSelect.hide();
                 $opponentSelect.hide();
                 $(".player-stat-1").text("Wins: " + player1.wins + " | Losses: " + player1.losses + " | Ties: " + player1.ties);
@@ -148,8 +151,7 @@ $(document).ready(function () {
             // Waiting for Player 1
             $turnSignal.hide();
             $(".waiting-player-1 ").show();
-            $(".player-choices-1").hide();
-            $(".player-choices-2").hide();
+            hidePlayerChoices();
             $playerSelect.hide();
             $opponentSelect.hide();
             $(".player-stat-1").hide();
@@ -179,8 +181,7 @@ $(document).ready(function () {
                     $(".player-name-2").text(player2name)
                     $(".waiting-player-1 ").show();
                     $(".waiting-player-2 ").hide();
-                    $(".player-choices-1").hide();
-                    $(".player-choices-2").hide();
+                    hidePlayerChoices();
                     $playerSelect.hide();
                     $opponentSelect.hide();
                     $(".player-stat-2").text("Wins: " + player2.wins + " | Losses: " + player2.losses + " | Ties: " + player2.ties);
@@ -197,8 +198,7 @@ $(document).ready(function () {
             // Waiting for Player 2
             $turnSignal.hide();
             $(".waiting-player-2 ").show();
-            $(".player-choices-1").hide();
-            $(".player-choices-2").hide();
+            hidePlayerChoices();
             $(".player-select-1").hide();
             $(".player-select-2").hide();
             $(".player-stat-2").hide();
@@ -210,9 +210,13 @@ $(document).ready(function () {
 
             $(".username-form").hide();
             console.log("Both player1 & player2 exist.")
+
             // Remove Waiting for player 1 & 2
             $(".waiting-player-1 ").hide();
             $(".waiting-player-2 ").hide();
+
+            $(".player1-box").removeClass("has-background-primary has-text-white");
+            $(".player2-box").removeClass("has-background-primary has-text-white");
             // -------------------------------------------------------------
             if (snapshot.val()[1].choice !== "") {
                 database.ref().child("/turn/").set(2);
@@ -228,12 +232,7 @@ $(document).ready(function () {
                 player = player1;
                 opponent = player2;
                 // Customize greeting
-                /*                 $greeting.text("Hi " + player1name + "! You're Player 1.");
-                                $(".turn").show();
-                                $(".turn").text("It's your turn!");
-                                $(".wait").hide();
-                                $(".player-choices-1").show();
-                                $(".player-choices-2").hide(); */
+                $greeting.text("The game has started. You're Player 1, " + player1name + "!");
 
             } else if (player.name === player2name) {
                 // The user is player2.
@@ -241,12 +240,8 @@ $(document).ready(function () {
                 player = player2;
                 opponent = player1;
                 // Customize greeting
-                /* $greeting.text("Hi " + player.name + "! You're Player 2.");
-                $(".turn").hide();
-                $(".wait").show();
-                $(".wait").text("Waiting for " + opponent.name + " to choose.");
-                $(".player-choices-1").hide();
-                $(".player-choices-2").hide(); */
+                $greeting.text("The game has started. You're Player 2, " + player2name + "!");
+
             } else {
                 // If the user is not one of the current players.
                 $greeting.text("Two players are currently playing. Please come back later!");
@@ -268,10 +263,14 @@ $(document).ready(function () {
 
         if (player1 && player2) {
             if (snapshot.val() == 1) {
+                // If it's player1's turn
+
+                // It's the start of a new turn. Set hasWinner to false
+                hasWinner = false;
                 console.log("TURN for Player 1");
                 turn = 1;
                 console.log("Your player.number:", player.number)
-                // If it's player1's turn
+
                 // Update display of Player1's box with green border
                 $(".player1-box").addClass("has-background-primary has-text-white");
                 $(".player2-box").removeClass("has-background-primary has-text-white");
@@ -298,12 +297,14 @@ $(document).ready(function () {
                     $(".player-select-2").hide();
                 }
             } else {
+                // If it's player2's turn
                 console.log("TURN for Player 2");
                 turn = 2;
-                // If it's player2's turn
+
                 // Update display of Player2's box with green border
                 $(".player1-box").removeClass("has-background-primary has-text-white");
                 $(".player2-box").addClass("has-background-primary has-text-white");
+
                 // Update the display if both players are in the game
                 if (player.number == 2) {
                     // It's turn 2 and the user is player 2. It's the user's turn to select r, p, s
@@ -311,7 +312,7 @@ $(document).ready(function () {
                     $(".turn").text("It's your turn!");
                     $(".wait").hide();
                     $(".player-choices-1").hide();
-                    $(".player-choices-2").css('display', 'block');
+                    $(".player-choices-2").show();
                     $(".player-select-1").hide();
                     $(".player-select-2").show();
                 } else {
@@ -326,7 +327,12 @@ $(document).ready(function () {
                 }
             }
         } else {
-            return false
+            // Opponent is missing
+            console.log("The opponent is disconnected.");
+            // Remove choice form the player
+            database.ref("/players/").child(player.number).update({
+                choice: '',
+            })
         }
     });
 
@@ -334,90 +340,67 @@ $(document).ready(function () {
     // ==============================================================
     // Player 1 
     // --------------------------------------------------------------
-    $(".player-rock-1").on("click", function (e) {
+    $(".player-choices-1").on("click", function (e) {
         e.preventDefault();
-        console.log("Player 1 clicked Rock.");
         choice1 = $(this).attr("data-choice");
         choice1Text = $(this).attr("data-text");
-        console.log("Player 1 " + player1.name + " select " + choice1Text)
+        player1Select(choice1Text);
         // Save Player1's choice to database
         database.ref().child("/players/1/choice").set(choice1Text);
         // Set the turn value to 2, as it is now player2's turn
         turn = 2;
         database.ref().child("/turn").set(2);
-
     });
 
-    $(".player-paper-1").on("click", function (e) {
-        e.preventDefault();
-        console.log("Player 1 clicked Paper.");
-        choice1 = $(this).attr("data-choice");
-        choice1Text = $(this).attr("data-text");
-        console.log("Player 1 " + player1.name + " select " + choice1Text)
-        // Save Player1's choice to database
-        database.ref().child("/players/1/choice").set(choice1Text);
-        // Set the turn value to 2, as it is now player2's turn
-        turn = 2;
-        database.ref().child("/turn").set(2);
-    });
-    $(".player-scissors-1").on("click", function (e) {
-        e.preventDefault();
-        console.log("Player 1 clicked Scissors.");
-        choice1 = $(this).attr("data-choice");
-        choice1Text = $(this).attr("data-text");
-        console.log("Player 1 " + player1.name + " select " + choice1Text)
-        // Save Player1's choice to database
-        database.ref().child("/players/1/choice").set(choice1Text);
-        // Set the turn value to 2, as it is now player2's turn
-        turn = 2;
-        database.ref().child("/turn").set(2);
-    });
+    function player1Select(choice1Text) {
+        if (player.number == 1) {
+            $("player-game-result-1").text(choice1Text);
+            $("player-game-result-1").show
+        } else {
+            $("player-game-result-1").hide
+        }
+    }
 
     // Player 2
     // --------------------------------------------------------------
-    $(".player-rock-2").on("click", function (e) {
+    $(".player-choices-2").on("click", function (e) {
         e.preventDefault();
-        console.log("Player 2 clicked Rock.");
+
+        $(".player1-box").removeClass("has-background-primary has-text-white");
+        $(".player2-box").removeClass("has-background-primary has-text-white");
+        $(".center-game-result").addClass("has-background-primary has-text-white");
         // Reference the value of Player2's choice 
         choice2 = $(this).attr("data-choice");
         choice2Text = $(this).attr("data-text");
         console.log("Player 2 " + player2.name + " select " + choice2Text)
         // Save Player1's choice to database
         database.ref().child("/players/2/choice").set(choice2Text);
-
-
-        // Player2 will always play after, so we can calculate outcome after Player2 selects
-        // Compare player1 and player 2 choices and record the outcome
-        getWinner(choice1, choice2);
     });
-    $(".player-paper-2").on("click", function (e) {
-        e.preventDefault();
-        console.log("Player 2 clicked Paper.");
-        // Reference the value of Player2's choice 
-        choice2 = $(this).attr("data-choice");
-        choice2Text = $(this).attr("data-text");
-        console.log("Player 2 " + player2.name + " select " + choice2Text)
-        // Save Player1's choice to database
-        database.ref().child("/players/2/choice").set(choice2Text);
 
-        // Player2 will always play after, so we can calculate outcome after Player2 selects
-        // Compare player1 and player 2 choices and record the outcome
-        getWinner(choice1, choice2);
-    });
-    $(".player-scissors-2").on("click", function (e) {
-        e.preventDefault();
-        console.log("Player 2 clicked Scissors.");
-        // Reference the value of Player2's choice 
-        choice2 = $(this).attr("data-choice");
-        choice2Text = $(this).attr("data-text");
-        console.log("Player 2 " + player2.name + " select " + choice2Text)
-        // Save Player1's choice to database
-        database.ref().child("/players/2/choice").set(choice2Text);
 
-        // Player2 will always play after, so we can calculate outcome after Player2 selects
-        // Compare player1 and player 2 choices and record the outcome
-        getWinner(choice1, choice2);
+    // 
+    database.ref("/players/").on("value", function (snapshot) {
+
+        console.log("on value listening for the change of choice", snapshot.val());
+
+        if (player1 && player2 && !hasWinner) {
+
+            // Listen to the change in choice 
+            // If both player1 and player2 has selected their choice
+            if ((snapshot.val()[1].choice !== "") && (snapshot.val()[2].choice !== "")) {
+
+                // Set local reference for calculating the winner
+                var choice1 = snapshot.val()[1].choice;
+                var choice2 = snapshot.val()[2].choice;
+                getWinner(choice1, choice2);
+                hasWinner = true;
+            } else {
+                return false
+            }
+        }
+
     });
+
 
 
     // =============================================================
@@ -425,35 +408,50 @@ $(document).ready(function () {
     // =============================================================
 
     function getWinner(choice1, choice2) {
-        if (choice1 === choice2) { recordTie(); }
-        if (choice1 === 'r' && choice2 === 's') { recordWin('1', '2'); }
-        if (choice1 === 'r' && choice2 === 'p') { recordWin('2', '1'); }
-        if (choice1 === 'p' && choice2 === 'r') { recordWin('1', '2'); }
-        if (choice1 === 'p' && choice2 === 's') { recordWin('2', '1'); }
-        if (choice1 === 's' && choice2 === 'p') { recordWin('1', '2'); }
-        if (choice1 === 's' && choice2 === 'r') { recordWin('2', '1'); }
+        console.log("choice1: " + choice1 + ", choice2: " + choice2)
+
+        // If both player select the same choice. It's a tie!
+        if (choice1 === choice2) {
+            console.log("It's a tie!");
+
+            player.ties++;
+            database.ref("/players/").child(player.number).update({
+                choice: '',
+                ties: player.ties
+            })
+
+            console.log("Wins: " + player.wins + " | Losses: " + player.losses + " | Ties: " + player.ties);
+            // Display on HTML
+            $('.player-game-result-1').text(choice1).show();
+            $('.player-game-result-2').text(choice2).show();
+            $(".turn").hide();
+            $(".winner").text("It's a tie!").show();
+            hidePlayerChoices();
+        };
+
+        if (choice1 === 'rock' && choice2 === 'paper') { recordWin('2', '1'); }
+        if (choice1 === 'rock' && choice2 === 'scissors') { recordWin('1', '2'); }
+
+        if (choice1 === 'paper' && choice2 === 'rock') { recordWin('1', '2'); }
+        if (choice1 === 'paper' && choice2 === 'scissors') { recordWin('2', '1'); }
+
+        if (choice1 === 'scissors' && choice2 === 'paper') { recordWin('1', '2'); }
+        if (choice1 === 'scissors' && choice2 === 'rock') { recordWin('2', '1'); }
+
+        setTimeout( function () {
+            // Reset the turn to 0 so that we can trigger the new round
+            database.ref().child("/turn/").set(1);
+        }, 5000)
+
     };
 
-    function recordTie() {
-        console.log("This round is a tie.")
-        player.turns++
-        database.ref("/players/").child(player.number).update({
-            choice: '',
-            turns: player.turns
-        });
-        player.ties++;
-        database.ref("/players/").child(player.number).update({
-            ties: player.ties
-        });
-        endGameRound("It's a tie.");
-    };
 
     function recordWin(winner, loser) {
         console.log(winner + " is a winner. " + loser + " is a loser");
-        player.turns++
+
+        // Clear player'schoice from the database
         database.ref("/players/").child(player.number).update({
             choice: '',
-            turns: player.turns
         });
 
         // If you are a winner, record your wins
@@ -466,32 +464,37 @@ $(document).ready(function () {
         } else {
             // If you are a loser, record your losses
             player.losses++;
-            players.child(loser).update({
+            database.ref("/players/").child(loser).update({
                 losses: player.losses
             });
         }
         // Update game result
-        endGameRound("Player " + winner + " wins!");
-    }
-
-    function endGameRound(annoucement) {
-        updateStat();
-        $('.player-game-result-' + opponent.number).text(opponent.choiceText).show();
+        // Display on HTML
+        $('.player-game-result-1').text(choice1).show();
+        $('.player-game-result-2').text(choice2).show();
         $(".turn").hide();
-        $(".winner").text(annoucement);
+        $(".winner").text("The winner is Player " + winner).show();
         hidePlayerChoices();
-        setTimeout(startNewRound, 3000);
     }
 
-    function startNewRound() {
-        $(".winner").empty();
-        $(".turn").show();
-        player.choice = "";
-        opponent.choice = "";
-        // Set the turn value to 2, as it is now player1's turn
-        turn = 1;
-        database.ref().child("/turn").set(1);
-    }
+    /*   function endGameRound(annoucement) {
+          updateStat();
+          $('.player-game-result-' + opponent.number).text(opponent.choiceText).show();
+          $(".turn").hide();
+          $(".winner").text(annoucement);
+          hidePlayerChoices();
+          setTimeout(startNewRound, 3000);
+      }
+  
+      function startNewRound() {
+          $(".winner").empty();
+          $(".turn").show();
+          player.choice = "";
+          opponent.choice = "";
+          // Set the turn value to 2, as it is now player1's turn
+          turn = 1;
+          database.ref().child("/turn").set(1); */
+
 
     // =============================================================
     // Function to handler clicks
@@ -607,6 +610,12 @@ $(document).ready(function () {
 
     // Attach a listener that detects user disconnection events
     database.ref("/players/").on("child_removed", function (snapshot) {
+        // Clear the value of choice of current player
+        database.ref("/players/").child(player.number).update({
+            choice: '',
+        })
+
+        // Send a message to chat 
         var msg = snapshot.val().name + " has disconnected!";
 
         // Get a key for the disconnection chat entry
@@ -619,6 +628,11 @@ $(document).ready(function () {
         var chatDisplay = msg + '&#13;&#10;';
         $(".chat-display").append(chatDisplay);
         scrollToBottom();
+
+        // Update game notification
+        $greeting.text(msg);
+        $("#game-notification").removeClass("is-primary");
+        $("#game-notification").addClass("is-warning");
     });
 
     // Find out when the content of the textarea changes 
