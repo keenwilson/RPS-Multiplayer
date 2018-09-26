@@ -43,14 +43,14 @@
         </div>
     </section>
     <!-- Game Area -->
-    <section class="section level">
+    <section class="section level is-marginless">
         <div class="container">
 
             <div class="column is-three-fifths is-offset-one-fifth">
-                <div class="notification is-primary">
-                    <button class="delete"></button>
+                <div id="game-notification" class="notification is-primary">
+                    <button id="close-notification" class="delete"></button>
                     <!-- Game's Message to the Player -->
-                    <p class="game-notification">Welcome to Rock-Paper-Scissors. Just like when we play this game at
+                    <p id="game-notification-message">Welcome to Rock-Paper-Scissors. Just like when we play this game at
                         the playground, you won't be able to play it alone. So, be sure to grab a friend (or a second
                         browser tab!). </p>
                 </div>
@@ -59,32 +59,35 @@
             <div class="columns">
                 <div class="column">
                     <!-- First column -->
-                    <div class="box">
+                    <div class="player1-box box">
                         <p class="player-name-1 title">
                             <!-- Player 1's Name -->
                         </p>
                         <p class="waiting waiting-player-1 subtitle">Waiting for Player 1</p>
-                        <div class="player-1-choices columns">
+                        <div class=" columns">
                             <!-- Rock, Paper, Scissors for Player 1 -->
-                            <div id="player-rock-1" data-choice="r" data-text="rock" role="button" class="column is-mobile">
+                            <div id="player-rock-1" data-choice="r" data-text="rock" role="button" class="player-choices-1 column is-mobile">
                                 <figure class="icon is-square">
                                     <img src="assets/images/icon-rock.png" alt="rock">
                                 </figure>
                                 <span> Rock</span>
                             </div>
-                            <div id="player-paper-1" data-choice="s" data-text="scissors" role="button" class="column is-mobile">
+                            <div id="player-paper-1" data-choice="s" data-text="scissors" role="button" class="player-choices-1 column is-mobile">
                                 <figure class="icon is-square">
                                     <img src="assets/images/icon-paper.png" alt="paper">
                                 </figure>
                                 <span> Paper</span>
                             </div>
-                            <div id="player-scissors-1" data-choice="s" data-text="scissors" role="button" class="column is-mobile">
+                            <div id="player-scissors-1" data-choice="s" data-text="scissors" role="button" class="player-choices-1 column is-mobile">
                                 <figure class="icon is-square">
                                     <img src="assets/images/icon-scissors.png" alt="scissors">
                                 </figure>
                                 <span> Scissors</span>
                             </div>
                         </div>
+                        <p class="player-select-1 title">
+                            <!-- Player 1's selected choices (Rock/ Paper/ Scissors) -->
+                        </p>
                         <p class="player-game-result-1 subtitie">
                             <!-- Player 1's Game Result Display -->
                         </p>
@@ -100,7 +103,7 @@
 
                             <!-- Game Result Display in the center -->
                             <p class="turn subtitle">
-                                <!-- Turns:  -->
+                                <!-- Turn  -->
                             </p>
                             <p class="winner title">
                                 <!-- The Winner is :  -->
@@ -118,26 +121,28 @@
                         <div class="player-choices-2 columns">
                             <!-- Player 2's Choices -->
 
-                            <div id="player-rock-2" data-choice="r" data-text="rock" role="button" class="column is-mobile">
+                            <div id="player-rock-2" data-choice="r" data-text="rock" role="button" class="player-choices-2 column is-mobile">
                                 <figure class="icon is-square">
                                     <img src="assets/images/icon-rock.png" alt="rock">
                                 </figure>
                                 <span> Rock</span>
                             </div>
-                            <div id="player-paper-2" data-choice="p" data-text="paper" role="button" class="column is-mobile">
+                            <div id="player-paper-2" data-choice="p" data-text="paper" role="button" class="player-choices-2 column is-mobile">
                                 <figure class="icon is-square">
                                     <img src="assets/images/icon-paper.png" alt="paper">
                                 </figure>
                                 <span> Paper</span>
                             </div>
-                            <div id="player-scissors-2" data-choice="s" data-text="scissors" role="button" class="column is-mobile">
+                            <div id="player-scissors-2" data-choice="s" data-text="scissors" role="button" class="player-choices-2 column is-mobile">
                                 <figure class="icon is-square">
                                     <img src="assets/images/icon-scissors.png" alt="scissors">
                                 </figure>
                                 <span> Scissors</span>
                             </div>
-
                         </div>
+                        <p class="player-select-2 title">
+                            <!-- Player 1's selected choices (Rock/ Paper/ Scissors) -->
+                        </p>
                         <p class="player-game-result-2 subtitie">
                             <!-- Player 2's Game Result Display -->
                         </p>
@@ -174,8 +179,12 @@
 
 
     <!-- Link jQuery -->
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-        crossorigin="anonymous"></script>
+    <script
+  src="https://code.jquery.com/jquery-3.3.1.js"
+  integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+  crossorigin="anonymous"></script>
+     <!-- Link Moment.js -->
+    <script src="https://cdn.jsdelivr.net/momentjs/2.12.0/moment.min.js"></script>
     <!-- Link Firebase -->
     <script src="https://www.gstatic.com/firebasejs/5.5.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/5.5.1/firebase-database.js"></script>

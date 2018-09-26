@@ -4,12 +4,8 @@
     background-repeat: no-repeat;
 }
 
-#player-1-rock,
-#player-1-paper,
-#player-1-scissors,
-#player-2-rock,
-#player-2-paper,
-#player-2-scissors  {
+.player-choices-1,
+.player-choices-2,  {
     cursor: pointer;
 }
 
