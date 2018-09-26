@@ -11,4 +11,8 @@
 
 textarea {
     resize: none;
-  }
+}
+
+.player-choices {
+    margin-bottom: 0.5rem;
+}
