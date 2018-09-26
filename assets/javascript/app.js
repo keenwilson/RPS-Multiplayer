@@ -108,7 +108,7 @@ $(document).ready(function () {
                 $greeting.text("Welcome to Rock-Paper-Scissors. Just like when we play this game at the playground, you won't be able to play it alone. So, be sure to grab a friend (or a second browser tab!).");
 
             } else {
-                
+
                 console.log("Player 1 exists in database.")
 
                 // Record Player 1 data
@@ -206,22 +206,25 @@ $(document).ready(function () {
             $(".waiting-player-1 ").hide();
             $(".waiting-player-2 ").hide();
 
-            
-        
             // Update display of Player1's box with green border
             $(".player1-box").addClass("has-background-primary has-text-white");
 
             // check if the user is player1 or player2
             if (player.name === player1name) {
-                // The user is player1
+                // The user is player1. 
+                // Save local player equalto player1 & local opponent equal player2.
+                player = player1;
+                opponent = player2;
                 // Customize greeting
                 $greeting.text("Hi " + player1name + "! You're Player 1.");
-                turn = 1;
                 $(".turn").text("It's your turn!");
                 $(".turn").show();
                 $(".player-choices-1").show();
             } else if (player.name === player2name) {
-                // The user is player2
+                // The user is player2.
+                // Save local player equalto player2 & local opponent equal player1.
+                player = player2;
+                opponent = player1;
                 // Customize greeting
                 $greeting.text("Hi " + player.name + "! You're Player 2.");
                 $(".turn").text("Waiting for " + player1name + " to choose.");
@@ -234,51 +237,49 @@ $(document).ready(function () {
                 return false;
             }
 
+            // Set the turn value to 1, as player1 goes first
+            database.ref().child("/turn/").set(1);
         }
+    });
 
+    // Attach a listener to the database /turn/ node to listen for any changes
+    database.ref("/turn/").on("value", function (snapshot) {
+        // Check if it's player1's turn
+        if (snapshot.val() === 1) {
+            console.log("TURN for Player 1");
+            turn = 1;
 
-        /* if (snapshot.val()[opponent.number] === '1' || snapshot.val()[opponent.number] === '2') {
-
-
-            console.log("an opponent is connected to Firebase. He/she is player " + opponent.number + ", his/her name is " + snapshot.val()[opponent.number].name);
-            // retrieve info from Firebase and save to local variables
-            opponent = snapshot.val()[opponent.number];
-            // Show opponent info on the browser
-            renderOpponent();
-        } else if (opponent.name.length > 0 && !snapshot.val()[opponent.number]) {
-            console.log(opponent.name + " left. Waiting for new opponent.");
-            $("#game-notification-message").text(opponent.name + " left. Waiting for new opponent.");
-            $("#game-notification").addClass("is-warning");
-            $(".waiting-" + opponent.number).show();
-            $(".player-choices-" + opponent.number).hide();
-            $(".player-name-" + opponent.number).empty();
-            $(".player-stat-" + opponent.number).empty();
-        } else {
-            console.log("Welcome to RPS! Please waiting for an opponent to join the game.");
-        };
-
-        //If you have connected to Firebase
-        if (snapshot.val()[player.number]  && player.number !== 0) {
-            if (player.name.length > 0) {
-                player = snapshot.val()[player.number];
-                renderPlayer();
-            } else {
-                console.log("You first open the page. Send a greeting message.")
-                $(".username-form").show();
-                $greeting.text("Welcome to Rock-Paper-Scissors. Just like when we play this game at the playground, you won't be able to play it alone. So, be sure to grab a friend (or a second browser tab!).");
-                $("#game-notification").removeClass("is-warning");
-                $("#game-notification").addClass("is-primary");
+            // Update the display if both players are in the game
+            if (player1 && player2) {
+                if (player.number === 1) {
+                    $(".turn").show();
+                    $(".turn").text("It's your turn!");
+                    $(".wait").hide();                    
+                } else if (player.number === 2) {
+                    $(".turn").hide();
+                    $(".wait").hide();  
+                    $(".wait").text("Waiting for " + opponent.name + " to choose.");
+                }
             }
-            
 
-            
-        } else {
-            console.log("You are not connected to Firebase")
-            $greeting.text("Two players are currently playing. Please come back later!");
-            $("#game-notification").removeClass("is-primary");
-            $("#game-notification").addClass("is-warning");
+        // Check if it's player2's turn
+        } else if (snapshot.val() === 2) {
+            console.log("TURN for Player 2");
+            turn = 2;
+
+            // Update the display if both players are in the game
+            if (player1 && player2) {
+                if (player.number === 2) {
+                    $(".turn").show();
+                    $(".turn").text("It's your turn!");
+                    $(".wait").hide();                    
+                } else if (player.number === 1) {
+                    $(".turn").hide();
+                    $(".wait").hide();  
+                    $(".wait").text("Waiting for " + opponent.name + " to choose.");
+                }
+            }
         }
- */
     });
 
     // =============================================================
@@ -387,7 +388,10 @@ $(document).ready(function () {
             database.ref("/players/").child(player.number).update({
                 name: player.name
             });
+            // Set the turn value to 1, as player1 goes first
+            database.ref().child("/turn/").set(1);
         }
+
 
         return false;
     });
