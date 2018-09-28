@@ -21,14 +21,22 @@ $(document).ready(function () {
     // Initial Values
     var playerConnected;
     var player1 = null;
+    var player1name;
+    var player1number;
+
     var player2 = null;
+    var player2name;
+    var player2number;
+
+    var playerNumber;
     var player = {
         number: "0",
         name: "",
         wins: 0,
         losses: 0,
         ties: 0,
-        choice: ""
+        choice: "",
+        turn: 0
     };
     var opponent = {
         number: "0",
@@ -36,9 +44,11 @@ $(document).ready(function () {
         wins: 0,
         losses: 0,
         ties: 0,
-        choice: ""
+        choice: "",
+        turn: 0
     };
     var hasWinner = false;
+    var roundStart = false;
 
     // Whose turn is it (Player 1 or Player 2)
     var turn = "";
@@ -51,10 +61,6 @@ $(document).ready(function () {
     // jQuery to grab elements for game messages
     var $greeting = $("#game-notification-message");
     var $turnSignal = $(".turn");
-    var $playerChoices = $(".player-choices-" + player.number);
-    var $opponentChoices = $(".player-choices-" + opponent.number);
-    var $playerSelect = $(".player-select-" + player.number);
-    var $opponentSelect = $(".player-select-" + opponent.number);
     var $winner = $(".winner");
 
     // --------------------------------------------------------------
@@ -84,76 +90,61 @@ $(document).ready(function () {
         if (player.number !== '0') {
 
             playerConnected = database.ref("/players/").child(player.number);
-            // Send your player info (name/ local wins/ local losses/ local turns)
+            // Send your player info (name/ local wins/ local losses/ local turns to the database)
             playerConnected.set(player);
             // Remove user from the connection list when they disconnect.
             database.ref("/players/").child(player.number).onDisconnect().remove();
-            // Clear selected r,p,s on the opponent database
-
-
-
 
         } else {
             // If 1 and 2 were taken, your number is still 0.
             // Disconnect from Firebase.
             app.delete();
         }
-        // If any errors are experienced, log them to console.
-
-
     }).catch(function (error) {
+        // If any errors are experienced, log them to console.
         console.log("The .once('value') read failed: " + error.code);
     });
 
+    // --------------------------------------------------------------------------------------------------------------
     // Ongoing event listening if Player1 & Player2 exist and display message
-    // -------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------------------------
     database.ref("/players/").on('value', function (snapshot) {
-
-        console.log("The result of .on'value':", snapshot.val());
 
         // Check if player1 exists in Firebase
         if (snapshot.child('1').exists()) {
 
             if (snapshot.val()[1].name === "") {
-                console.log("You are player 1. Please enter your name.")
+                // Player 1 is available but has no name value
+                // You are player 1. Please enter your name.
                 $greeting.text("Welcome to Rock-Paper-Scissors. Just like when we play this game at the playground, you won't be able to play it alone. So, be sure to grab a friend (or a second browser tab!).");
-
             } else {
-
-                console.log("Player 1 exists in database.")
-
-                // Record Player 1 data
+                // Player 1 exists in database.
+                // Save Player 1 data to local player1
                 player1 = snapshot.val()[1];
                 player1name = player1.name;
-
-                console.log(player1, "snapshot.val()[1]")
+                player1number = player1.number;
 
                 // Update Playey1 Display
+                // Say 'Hi player1's name' and 'Waiting for Player 2'
                 $greeting.text("Hi " + player1name + "! You're Player 1.");
                 $turnSignal.hide();
                 $(".player-name-1").text(player1name)
                 $(".waiting-player-1 ").hide();
                 $(".waiting-player-2 ").show();
-                hidePlayerChoices();
-                $playerSelect.hide();
-                $opponentSelect.hide();
-                $(".player-stat-1").text("Wins: " + player1.wins + " | Losses: " + player1.losses + " | Ties: " + player1.ties);
-                $(".player-stat-1").show();
+
+                // Set and display player1's game stat
+                $(".player-stat-1").text("Wins: " + player1.wins + " | Losses: " + player1.losses + " | Ties: " + player1.ties).show();;
                 $winner.hide();
             }
 
         } else {
+            // No player1 exist
             player1 = null;
             player1name = "";
 
-            console.log(player1, "no player1 exist")
-
-            // Waiting for Player 1
+            // Show text "Waiting for Player 1"
             $turnSignal.hide();
             $(".waiting-player-1 ").show();
-            hidePlayerChoices();
-            $playerSelect.hide();
-            $opponentSelect.hide();
             $(".player-stat-1").hide();
             $winner.hide();
         }
@@ -161,19 +152,20 @@ $(document).ready(function () {
         // Check if player2 exists in Firebase
         if (snapshot.child('2').exists()) {
             if (snapshot.val()[2].name === "") {
-                console.log("You are player 2. Please enter your name.")
+                // Player 2 is available but has no name value
+                // You are player 2. Please enter your name.
                 $greeting.text("Welcome to Rock-Paper-Scissors. Just like when we play this game at the playground, you won't be able to play it alone. So, be sure to grab a friend (or a second browser tab!).");
 
             } else {
 
                 if (snapshot.child('1').exists() && snapshot.val()[1].name !== "") {
-                    console.log("Player 2 exists in database.")
+                    // Only execute if the database already has player1
 
-                    // Record Player 2 data
+                    //Player 2 exists in database 
+                    // Save Player 2 data to local player2 variable
                     player2 = snapshot.val()[2];
                     player2name = player2.name;
-
-                    console.log(player2, "snapshot.val()[2]")
+                    player2number = player2.number;
 
                     // Update Playey2 Display
                     $greeting.text("Hi " + player2name + "! You're Player 2.");
@@ -181,49 +173,37 @@ $(document).ready(function () {
                     $(".player-name-2").text(player2name)
                     $(".waiting-player-1 ").show();
                     $(".waiting-player-2 ").hide();
-                    hidePlayerChoices();
-                    $playerSelect.hide();
-                    $opponentSelect.hide();
-                    $(".player-stat-2").text("Wins: " + player2.wins + " | Losses: " + player2.losses + " | Ties: " + player2.ties);
-                    $(".player-stat-2").show();
+
+                    $(".player-stat-2").text("Wins: " + player2.wins + " | Losses: " + player2.losses + " | Ties: " + player2.ties).show();;
                     $winner.hide();
                 }
-
             }
         } else {
+            // No player2 exist
             player2 = null;
             player2name = "";
-            console.log(player2, "no player2 exist")
 
-            // Waiting for Player 2
+            // Show text "Waiting for Player 2"
             $turnSignal.hide();
             $(".waiting-player-2 ").show();
-            hidePlayerChoices();
-            $(".player-select-1").hide();
-            $(".player-select-2").hide();
             $(".player-stat-2").hide();
             $winner.hide();
         }
 
-        // If both player1 & player2 exists in Firebase
+
         if (player1 && player2) {
+            // If both player1 & player2 exists in Firebase
 
+            // Remove the form for username input
             $(".username-form").hide();
-            console.log("Both player1 & player2 exist.")
 
-            // Remove Waiting for player 1 & 2
+            // Remove text "Waiting for player 1 & 2"
             $(".waiting-player-1 ").hide();
             $(".waiting-player-2 ").hide();
 
-            $(".player1-box").removeClass("has-background-primary has-text-white");
-            $(".player2-box").removeClass("has-background-primary has-text-white");
-            // -------------------------------------------------------------
-            if (snapshot.val()[1].choice !== "") {
-                database.ref().child("/turn/").set(2);
-            } else {
-                database.ref().child("/turn/").set(1);
-            }
-            // -------------------------------------------------------------
+            // Set box background for Player1 & Player 2 to default
+            boxBackgroundDefault();
+
 
             // check if the user is player1 or player2
             if (player.name === player1name) {
@@ -231,110 +211,162 @@ $(document).ready(function () {
                 // Save local player equalto player1 & local opponent equal player2.
                 player = player1;
                 opponent = player2;
+                playerNumber = player1number;
                 // Customize greeting
                 $greeting.text("The game has started. You're Player 1, " + player1name + "!");
+/*                 database.ref().child("/players/1/turn").set(1); */
+                /* database.ref("/players/").child(player.number).update({
+                    turn: '1',
+                }) */
+
 
             } else if (player.name === player2name) {
                 // The user is player2.
                 // Save local player equalto player2 & local opponent equal player1.
                 player = player2;
                 opponent = player1;
+                playerNumber = player2number;
                 // Customize greeting
                 $greeting.text("The game has started. You're Player 2, " + player2name + "!");
+/*                 database.ref().child("/players/2/turn").set(1); */
+         /*        database.ref("/players/").child(player.number).update({
+                    turn: '1',
+                }); */
+               
+                database.ref().child("/turn/").set('start');
+
 
             } else {
                 // If the user is not one of the current players.
                 $greeting.text("Two players are currently playing. Please come back later!");
                 $("#game-notification").removeClass("is-primary");
                 $("#game-notification").addClass("is-warning");
-                return false;
+               
             }
 
-        }
-
-    });
-
-
-
-    // Attach a listener to the database /turn/ node to listen for any changes
-    // ---------------------------------------------------------------------
-    database.ref("/turn/").on("value", function (snapshot) {
-        console.log("/turn/  snapshot.val()", snapshot.val())
-
-        if (player1 && player2) {
-            if (snapshot.val() == 1) {
-                // If it's player1's turn
-
-                // It's the start of a new turn. Set hasWinner to false
-                hasWinner = false;
-                console.log("TURN for Player 1");
+            // Handle turn
+            //====================================================================================
+           /*  if ((snapshot.val()[1].turn === 1) && (snapshot.val()[2].turn === 1)) {
+                // If the turn on database for both players is 1
+                // Set local turn to 1 and start round
                 turn = 1;
-                console.log("Your player.number:", player.number)
+                roundStart = true;
 
                 // Update display of Player1's box with green border
-                $(".player1-box").addClass("has-background-primary has-text-white");
-                $(".player2-box").removeClass("has-background-primary has-text-white");
+                boxBackgroundHighlightPlayer1();
 
-                // Update the display if both players are in the game
-                if (player.number == 1) {
-                    // It's turn 1 and the user is player 1. It's the user's turn to select r, p, s
-                    $(".turn").show();
-                    $(".turn").text("It's your turn!");
-                    $(".wait").hide();
-                    $(".player-choices-1").show();
-                    $(".player-choices-2").hide();
-                    $(".player-select-1").show();
-                    $(".player-select-2").hide();
+                // Display choices for Player1 to select
+                $("#selection-1").children().show();
+                $("#selection-2").children().hide();
 
+                if (playerNumber === 1) {
+                    $turnSignal.text("It's your turn!").show();;
+                } else if (playerNumber === 2) {
+                    $turnSignal.text("Waiting for " + player1.name + " to choose.").show();
                 } else {
-                    // It's turn 1 and the user is player 2. The user cannot see what player1 selects
-                    $(".turn").hide();
-                    $(".wait").show();
-                    $(".wait").text("Waiting for " + opponent.name + " to choose.");
-                    $(".player-choices-1").hide();
-                    $(".player-choices-2").hide();
-                    $(".player-select-1").hide();
-                    $(".player-select-2").hide();
-                }
-            } else {
-                // If it's player2's turn
-                console.log("TURN for Player 2");
-                turn = 2;
-
-                // Update display of Player2's box with green border
-                $(".player1-box").removeClass("has-background-primary has-text-white");
-                $(".player2-box").addClass("has-background-primary has-text-white");
-
-                // Update the display if both players are in the game
-                if (player.number == 2) {
-                    // It's turn 2 and the user is player 2. It's the user's turn to select r, p, s
-                    $(".turn").show();
-                    $(".turn").text("It's your turn!");
-                    $(".wait").hide();
-                    $(".player-choices-1").hide();
-                    $(".player-choices-2").show();
-                    $(".player-select-1").hide();
-                    $(".player-select-2").show();
-                } else {
-                    // It's turn 2 and the user is player 1. The user cannot see what player1 selects
-                    $(".turn").hide();
-                    $(".wait").show();
-                    $(".wait").text("Waiting for " + opponent.name + " to choose.");
-                    $(".player-choices-1").hide();
-                    $(".player-choices-2").hide();
-                    $(".player-select-1").hide();
-                    $(".player-select-2").hide();
+                    console.log("You are not either player1 or player2.")
                 }
             }
-        } else {
-            // Opponent is missing
-            console.log("The opponent is disconnected.");
-            // Remove choice form the player
-            database.ref("/players/").child(player.number).update({
-                choice: '',
-            })
+
+            if ((snapshot.val()[1].turn === 2) && (snapshot.val()[2].turn === 2)) {
+                // The turn on database for both players is 2
+                turn = 2;
+                // This only happens when player1 has selected r/p/s
+                // Start round
+                roundStart = true;
+
+                // Update display of Player2's box with green border
+                boxBackgroundHighlightPlayer2();
+
+                // Display choices for Player2 to select
+                $("#selection-1").children().hide();
+                $("#selection-2").children().show();
+
+
+
+                if (playerNumber === 2) {
+                    $turnSignal.text("It's your turn!").show();;
+                } else if (playerNumber === 1) {
+                    $turnSignal.text("Waiting for " + player2.name + " to choose.").show();
+                } else {
+                    console.log("You are not either player1 or player2.")
+                }
+            } */
+            //================================================================================
         }
     });
+
+
+
+
+    // =============================================================
+    // Attach a listener to players's turn to listen for any changes
+    // =============================================================
+    database.ref("/turn/").on('value', function (snapshot) {
+        console.log("Turn status", snapshot.val());
+    });
+   
+   
+   
+   
+   
+    /*  database.ref("/turn/").on("value", function (snapshot) {
+
+        database.ref("/players/").child(player.number).update({
+            choice: '',
+        })
+        // Handle turn
+        //====================================================================================
+        if ((snapshot.val()[1].turn === 1) && (snapshot.val()[2].turn === 1)) {
+            // If the turn on database for both players is 1
+            // Set local turn to 1 and start round
+            turn = 1;
+            roundStart = true;
+
+            // Update display of Player1's box with green border
+            boxBackgroundHighlightPlayer1();
+
+            // Display choices for Player1 to select
+            $("#selection-1").children().show();
+            $("#selection-2").children().hide();
+
+            if (playerNumber === 1) {
+                $turnSignal.text("It's your turn!").show();;
+            } else if (playerNumber === 2) {
+                $turnSignal.text("Waiting for " + player1.name + " to choose.").show();
+            } else {
+                console.log("You are not either player1 or player2.")
+            }
+        }
+
+        if ((snapshot.val()[1].turn === 2) && (snapshot.val()[2].turn === 2)) {
+            // The turn on database for both players is 2
+            turn = 2;
+            // This only happens when player1 has selected r/p/s
+            // Start round
+            roundStart = true;
+
+            // Update display of Player2's box with green border
+            boxBackgroundHighlightPlayer2();
+
+            // Display choices for Player2 to select
+            $("#selection-1").children().hide();
+            $("#selection-2").children().show();
+
+
+
+            if (playerNumber === 2) {
+                $turnSignal.text("It's your turn!").show();;
+            } else if (playerNumber === 1) {
+                $turnSignal.text("Waiting for " + player2.name + " to choose.").show();
+            } else {
+                console.log("You are not either player1 or player2.")
+            }
+        }
+
+    });
+
+ */
 
     // Click events for Rock, Paper, Scissors
     // ==============================================================
@@ -344,64 +376,43 @@ $(document).ready(function () {
         e.preventDefault();
         choice1 = $(this).attr("data-choice");
         choice1Text = $(this).attr("data-text");
-        player1Select(choice1Text);
+
         // Save Player1's choice to database
         database.ref().child("/players/1/choice").set(choice1Text);
+
+        // For player1, shows the selected choice
+        if (playerNumber === 1) {
+            $("#player-select-1").text(choice1Text).show();
+        } else if (playerNumber === 2) {
+            $("#player-select-1").text(player1.name + " has selected.").show();
+        } else {
+            console.log("You are not player1 or player2.")
+        }
+
         // Set the turn value to 2, as it is now player2's turn
+        roundStart = true;
         turn = 2;
-        database.ref().child("/turn").set(2);
+        /*         database.ref().child("/turn").set(2); */
+        database.ref().child("/players/1/turn").set(2);
+        database.ref().child("/players/2/turn").set(2);
     });
 
-    function player1Select(choice1Text) {
-        if (player.number == 1) {
-            $("player-game-result-1").text(choice1Text);
-            $("player-game-result-1").show
-        } else {
-            $("player-game-result-1").hide
-        }
-    }
 
     // Player 2
     // --------------------------------------------------------------
     $(".player-choices-2").on("click", function (e) {
         e.preventDefault();
 
-        $(".player1-box").removeClass("has-background-primary has-text-white");
-        $(".player2-box").removeClass("has-background-primary has-text-white");
+        boxBackgroundDefault();
         $(".center-game-result").addClass("has-background-primary has-text-white");
         // Reference the value of Player2's choice 
         choice2 = $(this).attr("data-choice");
         choice2Text = $(this).attr("data-text");
         console.log("Player 2 " + player2.name + " select " + choice2Text)
-        // Save Player1's choice to database
+        // Save Player2's choice to database
         database.ref().child("/players/2/choice").set(choice2Text);
+        getWinner(choice1Text, choice2Text);
     });
-
-
-    // 
-    database.ref("/players/").on("value", function (snapshot) {
-
-        console.log("on value listening for the change of choice", snapshot.val());
-
-        if (player1 && player2 && !hasWinner) {
-
-            // Listen to the change in choice 
-            // If both player1 and player2 has selected their choice
-            if ((snapshot.val()[1].choice !== "") && (snapshot.val()[2].choice !== "")) {
-
-                // Set local reference for calculating the winner
-                var choice1 = snapshot.val()[1].choice;
-                var choice2 = snapshot.val()[2].choice;
-                getWinner(choice1, choice2);
-                hasWinner = true;
-            } else {
-                return false
-            }
-        }
-
-    });
-
-
 
     // =============================================================
     // Function to Calculate Winner
@@ -409,24 +420,31 @@ $(document).ready(function () {
 
     function getWinner(choice1, choice2) {
         console.log("choice1: " + choice1 + ", choice2: " + choice2)
+        $('.player-game-result-1').text(choice1).show();
+        $('.player-game-result-2').text(choice2).show();
+        boxBackgroundHighlightCenter();
+        $turnSignal.hide();
+        hidePlayerChoices();
 
         // If both player select the same choice. It's a tie!
         if (choice1 === choice2) {
             console.log("It's a tie!");
-
             player.ties++;
             database.ref("/players/").child(player.number).update({
                 choice: '',
                 ties: player.ties
             })
-
             console.log("Wins: " + player.wins + " | Losses: " + player.losses + " | Ties: " + player.ties);
-            // Display on HTML
-            $('.player-game-result-1').text(choice1).show();
-            $('.player-game-result-2').text(choice2).show();
-            $(".turn").hide();
-            $(".winner").text("It's a tie!").show();
-            hidePlayerChoices();
+            // Display the winner on HTML
+            $winner.text("It's a tie!").show();
+            // Start the next game round and set Turn 1 for Player 1 to play
+            setTimeout(function () {
+                roundStart = false;
+                hasWinner = false;
+                turn = 1;
+                database.ref().child("/players/1/turn").set(1);
+                database.ref().child("/players/2/turn").set(1);
+            }, 5000);
         };
 
         if (choice1 === 'rock' && choice2 === 'paper') { recordWin('2', '1'); }
@@ -438,21 +456,11 @@ $(document).ready(function () {
         if (choice1 === 'scissors' && choice2 === 'paper') { recordWin('1', '2'); }
         if (choice1 === 'scissors' && choice2 === 'rock') { recordWin('2', '1'); }
 
-        setTimeout( function () {
-            // Reset the turn to 0 so that we can trigger the new round
-            database.ref().child("/turn/").set(1);
-        }, 5000)
-
     };
 
 
     function recordWin(winner, loser) {
         console.log(winner + " is a winner. " + loser + " is a loser");
-
-        // Clear player'schoice from the database
-        database.ref("/players/").child(player.number).update({
-            choice: '',
-        });
 
         // If you are a winner, record your wins
         if (winner === player.number) {
@@ -470,30 +478,17 @@ $(document).ready(function () {
         }
         // Update game result
         // Display on HTML
-        $('.player-game-result-1').text(choice1).show();
-        $('.player-game-result-2').text(choice2).show();
-        $(".turn").hide();
-        $(".winner").text("The winner is Player " + winner).show();
-        hidePlayerChoices();
-    }
+        $winner.text("The winner is Player " + winner).show();
 
-    /*   function endGameRound(annoucement) {
-          updateStat();
-          $('.player-game-result-' + opponent.number).text(opponent.choiceText).show();
-          $(".turn").hide();
-          $(".winner").text(annoucement);
-          hidePlayerChoices();
-          setTimeout(startNewRound, 3000);
-      }
-  
-      function startNewRound() {
-          $(".winner").empty();
-          $(".turn").show();
-          player.choice = "";
-          opponent.choice = "";
-          // Set the turn value to 2, as it is now player1's turn
-          turn = 1;
-          database.ref().child("/turn").set(1); */
+        // Start the next game round and set Turn 1 for Player 1 to play
+        setTimeout(function () {
+            roundStart = false;
+            hasWinner = false;
+            turn = 1;
+            database.ref().child("/players/1/turn").set(1);
+            database.ref().child("/players/2/turn").set(1);
+        }, 5000);
+    };
 
 
     // =============================================================
@@ -509,8 +504,6 @@ $(document).ready(function () {
             database.ref("/players/").child(player.number).update({
                 name: player.name
             });
-
-            database.ref().child("/turn/").set(0);
         }
         return false;
     });
@@ -520,32 +513,34 @@ $(document).ready(function () {
     // Functions for changing HTML elements
     // =============================================================
 
-    function renderPlayer() {
+    // Function to toggle box background color
+    function boxBackgroundDefault() {
+        $(".player1-box").removeClass("has-background-primary has-text-white");
+        $(".player2-box").removeClass("has-background-primary has-text-white");
+        $(".center-game-result").removeClass("has-background-primary has-text-white");
+    };
 
-        $(".username-form").hide();
-        $(".waiting-player-" + player.number).hide();
-        $("#game-notification-message").text("Hello " + player.name + "! You are Player " + player.number + ".");
-        $(".player-name-" + player.number).text(player.name);
-        updateStat()
-        $(".player-stat-" + player.number).show();
-        $(".turn").show();
-        $(".chat-box").show();
-        hidePlayerChoices();
+    function boxBackgroundHighlightPlayer1() {
+        $(".player1-box").addClass("has-background-primary has-text-white");
+        $(".player2-box").removeClass("has-background-primary has-text-white");
+        $(".center-game-result").removeClass("has-background-primary has-text-white");
+    };
 
-    }
+    function boxBackgroundHighlightPlayer2() {
+        $(".player1-box").removeClass("has-background-primary has-text-white");
+        $(".player2-box").addClass("has-background-primary has-text-white");
+        $(".center-game-result").removeClass("has-background-primary has-text-white");
+    };
 
-    function renderOpponent() {
-        $(".waiting-" + opponent.number).hide();
-        $(".player-name-" + opponent.number).text(opponent.name);
-        updateStat()
-        $(".player-stat-" + opponent.number).show();
-        hidePlayerChoices();
-    }
+    function boxBackgroundHighlightCenter() {
+        $(".player1-box").removeClass("has-background-primary has-text-white");
+        $(".player2-box").removeClass("has-background-primary has-text-white");
+        $(".center-game-result").addClass("has-background-primary has-text-white");
+    };
 
-    function showPlayerChoices() {
-        $(".player-choices-" + player.number).show();
-        $(".player-choices-" + opponent.number).show();
-    }
+
+
+    // Hide Rock, Paper, Scissors buttons so that the user cannot accidentally click it
     function hidePlayerChoices() {
         $(".player-choices-" + player.number).hide();
         $(".player-choices-" + opponent.number).hide();
@@ -598,7 +593,8 @@ $(document).ready(function () {
         var chatMessage = snapshot.val();
 
 
-        // Only show messages sent in the last half hour. A simple workaround for not having a ton of chat history.
+        // Only show messages sent in the last half hour.
+        // So that we have only a recent chat history
         if (Date.now() - chatMessage.timestamp < 1800000) {
             //  update HTML elements.
             var chatDisplay = chatMessage.sender + ' : ' + chatMessage.message + '&#13;&#10;';
@@ -607,13 +603,8 @@ $(document).ready(function () {
         }
     });
 
-
     // Attach a listener that detects user disconnection events
     database.ref("/players/").on("child_removed", function (snapshot) {
-        // Clear the value of choice of current player
-        database.ref("/players/").child(player.number).update({
-            choice: '',
-        })
 
         // Send a message to chat 
         var msg = snapshot.val().name + " has disconnected!";
@@ -629,21 +620,22 @@ $(document).ready(function () {
         $(".chat-display").append(chatDisplay);
         scrollToBottom();
 
-        // Update game notification
-        $greeting.text(msg);
-        $("#game-notification").removeClass("is-primary");
-        $("#game-notification").addClass("is-warning");
+        // Signal turn to stop
+        database.ref().child("/turn/").set('stop');
     });
 
     // Find out when the content of the textarea changes 
+    // Scroll to the bottom of the chat box
     $(".chat-display").change(function () {
         scrollToBottom();
     });
-    // Scroll to the bottom of the chat box
+
+    // Function to scroll to the bottom of the chat box
     var messages = $('.chat-display');
     function scrollToBottom() {
         messages[0].scrollTop = messages[0].scrollHeight;
     };
+
     scrollToBottom();
 
     // Prevent typing in chat box
@@ -651,4 +643,4 @@ $(document).ready(function () {
         e.preventDefault();
     });
 
-}); /* End $(document).ready(function(){}) */
+}); // End $(document).ready(function(){}
