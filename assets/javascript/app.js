@@ -379,7 +379,7 @@ $(document).ready(function () {
                     $(".player-choices-2").hide();
 
                     $turnSignal.text("Waiting for " + player1.name + " to choose.").show();
-                    $(".player-select-1").text(player1.name + " is selecting").show();
+                    $("#player-select-1").text(player1.name + " is selecting").show();
                 }
 
                 // Continue game with Player2's turn
@@ -409,7 +409,7 @@ $(document).ready(function () {
                     $turnSignal.text("It's your turn!").show();;
 
                     // Tell Player2 that Player1 has selected
-                    $(".player-select-1").text(player1.name + " has selected.").show();
+                    $("#player-select-1").text(player1.name + " has selected.").show();
                 }
 
                 // User is player1
@@ -423,7 +423,7 @@ $(document).ready(function () {
                     $(".player-choices-2").hide();
 
                     $turnSignal.text("Waiting for " + player2.name + " to choose.").show();
-                    $(".player-select-1").text("You have selected.").show();
+                    $("#player-select-1").text("You have selected.").show();
                 }
 
             } else if (snapshot.child("/game/").val() === 'result') {
@@ -432,8 +432,8 @@ $(document).ready(function () {
                 $(".player-choices-1").hide();
                 $(".player-choices-2").hide();
 
-                $(".player-select-1").text("You have selected.").show();
-                $(".player-select-2").text("You have selected.").show();
+                $("#player-select-1").text("You have selected.").show();
+                $("#player-select-2").text("You have selected.").show();
 
 
                 // calculate outcome
@@ -587,8 +587,8 @@ $(document).ready(function () {
             $(".player-choices-1").hide();
             $(".player-choices-2").hide();
 
-            $(".player-select-1").text(choice1).show();
-            $(".player-select-2").text(choice2).show();
+            $("#player-select-1").text(choice1).show();
+            $("#player-select-2").text(choice2).show();
 
 
             $(".winner-announcement").text(results).show();
@@ -598,8 +598,8 @@ $(document).ready(function () {
             boxBackgroundDefault();
             $startButton.hide();
             $(".winner-announcement").text('').hide();
-            $(".player-select-1").text('').hide();
-            $(".player-select-2").text('').hide();
+            $("#player-select-1").text('').hide();
+            $("#player-select-2").text('').hide();
         }, 3000)
         window.setTimeout(function () {
             database.ref("/turn/").set({
