@@ -34,8 +34,8 @@
                         <input id="username" class="input" type="text" placeholder="Player Name">
                     </p>
                     <p class="control">
-                        <a id="start-game" class="button is-primary">
-                            Start
+                        <a id="user-enter" class="button is-primary">
+                            Join
                         </a>
                     </p>
                 </div>
@@ -66,30 +66,27 @@
                         <p class="waiting waiting-player-1 subtitle">Waiting for Player 1</p>
                         <div id="selection-1" class="column is-6">
                             <!-- Rock, Paper, Scissors for Player 1 -->
-                            <div data-choice="r" data-text="rock" role="button" class="player-rock-1 player-choices player-choices-1 is-mobile button is-outlined is-large">
+                            <div data-choice="r" data-text="rock" role="button" class="player-choices-1 is-mobile button is-outlined is-large">
                                 <figure class="icon is-square">
-                                    <img data-choice="r" data-text="rock" role="button" class="player-choices-1 player-rock-1" src="assets/images/icon-rock.png" alt="rock">
+                                    <img data-choice="r" data-text="rock" role="button" class="player-choices-1" src="assets/images/icon-rock.png" alt="rock">
                                 </figure>
-                                <span data-choice="r" data-text="rock" role="button" class="player-choices-1 player-rock-1"> Rock</span>
+                                <span data-choice="r" data-text="rock" role="button" class="player-choices-1"> Rock</span>
                             </div>
-                            <div data-choice="p" data-text="paper" role="button" class="player-paper-1 player-choices player-choices-1 is-mobile button is-outlined is-large">
+                            <div data-choice="p" data-text="paper" role="button" class="player-choices player-choices-1 is-mobile button is-outlined is-large">
                                 <figure class="icon is-square">
-                                    <img data-choice="p" data-text="paper" role="button" class="player-choices-1 player-paper-1" src="assets/images/icon-paper.png" alt="paper">
+                                    <img data-choice="p" data-text="paper" role="button" class="player-choices-1" src="assets/images/icon-paper.png" alt="paper">
                                 </figure>
-                                <span data-choice="p" data-text="paper" role="button" class="player-choices-1 player-paper-1"> Paper</span>
+                                <span data-choice="p" data-text="paper" role="button" class="player-choices-1"> Paper</span>
                             </div>
-                            <div data-choice="s" data-text="scissors" role="button" class="player-scissors-1 player-choices player-choices-1 is-mobile button is-outlined is-large">
+                            <div data-choice="s" data-text="scissors" role="button" class="player-choices player-choices-1 is-mobile button is-outlined is-large">
                                 <figure class="icon is-square">
-                                    <img data-choice="s" data-text="scissors" role="button" class="player-choices-1 player-scissors-1" src="assets/images/icon-scissors.png" alt="scissors">
+                                    <img data-choice="s" data-text="scissors" role="button" class="player-choices-1" src="assets/images/icon-scissors.png" alt="scissors">
                                 </figure>
-                                <span data-choice="s" data-text="scissors" role="button" class="player-choices-1 player-scissors-1"> Scissors</span>
+                                <span data-choice="s" data-text="scissors" role="button" class="player-choices-1"> Scissors</span>
                             </div>
                         </div>
                         <p class="player-select-1 subtitle has-text-centered has-text-primary is-uppercase is-size-3">
                             <!-- Player 1's selected choices (Rock/ Paper/ Scissors) -->
-                        </p>
-                        <p class="player-game-result-1 subtitie has-text-centered has-text-grey-dark">
-                            <!-- Player 1's Game Result Display -->
                         </p>
                         <p class="player-stat-1 subtitle has-text-grey-dark">
                             <!-- Player 1's Wins and Losses -->
@@ -100,13 +97,10 @@
                 <div class="column">
                     <!-- Second column -->
                     <div class="box center-game-result">
-
-                            <!-- Game Result Display in the center -->
+                            <!-- Game Status Display in the center -->
+                            <a id="start-game" class="button is-large is-fullwidth is-info is-rounded"> Start!</a>
                             <p class="turn subtitle">
                                 <!-- Turn Message for Player 1  -->
-                            </p>
-                            <p class="wait subtitle">
-                                <!-- Turn Message for Player 2 -->
                             </p>
                             <p class="winner title">
                                 <!-- The Winner is :  -->
@@ -122,28 +116,29 @@
                         </p>
                         <p class="waiting waiting-player-2 subtitle">Waiting for Player 2</p>
                         <div id="selection-2" class="column is-6">
-                            <!-- Rock, Paper, Scissors for Player 1 -->
-                            <div data-choice="r" data-text="rock" role="button" class="player-rock-2 player-choices player-choices-2 is-mobile button is-outlined is-large">
+                            <!-- Rock, Paper, Scissors for Player 2 -->
+                            <div data-choice="r" data-text="rock" role="button" class="player-choices-2 is-mobile button is-outlined is-large">
                                 <figure class="icon is-square">
-                                    <img data-choice="r" data-text="rock" role="button" class="player-choices-2 player-rock-2" src="assets/images/icon-rock.png" alt="rock">
+                                    <img data-choice="r" data-text="rock" role="button" class="player-choices-2" src="assets/images/icon-rock.png" alt="rock">
                                 </figure>
-                                <span data-choice="r" data-text="rock" role="button" class="player-choices-2 player-rock-2"> Rock</span>
+                                <span data-choice="r" data-text="rock" role="button" class="player-choices-2"> Rock</span>
                             </div>
-                            <div data-choice="p" data-text="paper" role="button" class="player-paper-2 player-choices player-choices-2 is-mobile button is-outlined is-large">
+                            <div data-choice="p" data-text="paper" role="button" class="player-choices player-choices-2 is-mobile button is-outlined is-large">
                                 <figure class="icon is-square">
-                                    <img data-choice="p" data-text="paper" role="button" class="player-choices-2 player-paper-2" src="assets/images/icon-paper.png" alt="paper">
+                                    <img data-choice="p" data-text="paper" role="button" class="player-choices-2" src="assets/images/icon-paper.png" alt="paper">
                                 </figure>
-                                <span data-choice="p" data-text="paper" role="button" class="player-choices-2 player-paper-2"> Paper</span>
+                                <span data-choice="p" data-text="paper" role="button" class="player-choices-2"> Paper</span>
                             </div>
-                            <div data-choice="s" data-text="scissors" role="button" class="player-scissors-2 player-choices player-choices-2 is-mobile button is-outlined is-large">
+                            <div data-choice="s" data-text="scissors" role="button" class="player-choices-2 is-mobile button is-outlined is-large">
                                 <figure class="icon is-square">
-                                    <img data-choice="s" data-text="scissors" role="button" class="player-choices-2 player-scissors-2" src="assets/images/icon-scissors.png" alt="scissors">
+                                    <img data-choice="s" data-text="scissors" role="button" class="player-choices-2" src="assets/images/icon-scissors.png" alt="scissors">
                                 </figure>
-                                <span data-choice="s" data-text="scissors" role="button" class="player-choices-2 player-scissors-2"> Scissors</span>
+                                <span data-choice="s" data-text="scissors" role="button" class="player-choices-2"> Scissors</span>
                             </div>
+                            <!-- End Rock, Paper, Scissors for Player 2 -->
                         </div>
-                        <p class="player-select-2 subtitle has-text-centered has-text-primary is-uppercase is-size-3">
-                            <!-- Player 1's selected choices (Rock/ Paper/ Scissors) -->
+                        <p id="player-select-2" class="player-select subtitle has-text-centered has-text-primary is-uppercase is-size-3">
+                            <!-- Player 2's selected choices (Rock/ Paper/ Scissors) -->
                         </p>
                         <p class="player-game-result-2 subtitie has-text-centered has-text-grey-dark">
                             <!-- Player 2's Game Result Display -->
