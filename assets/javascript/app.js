@@ -25,33 +25,24 @@ $(document).ready(function () {
     var player2number;
 
     var currentPlayerName;
-    var currentPlayerNumber;
 
-    var opponentName;
-    var opponentNumber;
-
-    var name = {};
 
     var player = {
         number: "0",
         name: "",
         wins: 0,
         losses: 0,
-        ties: 0,
         choice: "",
-        turn: 0
     };
     var opponent = {
         number: "0",
         name: "",
         wins: 0,
         losses: 0,
-        ties: 0,
         choice: "",
-        turn: 0
     };
 
-    var wins1, wins2, losses1, losses2, ties1, ties2;
+    var wins1, wins2, losses1, losses2;
 
     // What Player1 and Player2 select (r, p, or s)
     var choice1 = "";
@@ -63,12 +54,14 @@ $(document).ready(function () {
     var $greeting = $("#game-notification-message");
     var $startButton = $("#start-game");
     var $turnSignal = $(".turn");
-    var $winner = $(".winner");
+    var $winner = $(".winner-announcement");
 
-
+    
 
     function listeners() {
+
         // Click events for Join button to submit a name
+        // --------------------------------------------------------------
         $("#user-enter").one("click", function (e) {
             e.preventDefault();
             currentPlayerName = $("#username").val().trim();
@@ -79,8 +72,10 @@ $(document).ready(function () {
             }
             return false;
         });
+        // --------------------------------------------------------------
 
         // Click events for Start! button
+        // --------------------------------------------------------------
         $("#start-game").on('click', function (e) {
             e.preventDefault();
             // Initiate Game
@@ -88,10 +83,14 @@ $(document).ready(function () {
                 game: 'start',
                 player: player1name
             });
+            $startButton.hide()
             return false;
         })
+        // --------------------------------------------------------------
+
 
         // .once listens for exactly one event of /"players"/ path
+        // --------------------------------------------------------------
         database.ref("/players/").once('value').then(function (snapshot) {
 
             // If Firebase has a key of player 1 or player 2 stored, update our client-side variables
@@ -118,7 +117,7 @@ $(document).ready(function () {
                 // Remove user from the connection list when they disconnect.
                 database.ref("/players/").child(player.number).onDisconnect().remove();
 
-
+                
 
             } else {
                 // If 1 and 2 were taken, your number is still 0.
@@ -130,8 +129,10 @@ $(document).ready(function () {
             // If any errors are experienced, log them to console.
             console.log("The .once('value') read failed: " + error.code);
         });
+        // --------------------------------------------------------------
 
         // Display player name and wins/losses stat in a box
+        // --------------------------------------------------------------
         database.ref("/players/").on('value', function (snapshot) {
 
             // Check if player1 exists in Firebase
@@ -170,7 +171,14 @@ $(document).ready(function () {
                     $(".waiting-player-2 ").show();
 
                     // Set and display player1's game stat
-                    $(".player-stat-1").text("Wins: " + player1.wins + " | Losses: " + player1.losses + " | Ties: " + player1.ties).show();;
+                    $(".player-stat-1").text("Wins: " + player1.wins + " | Losses: " + player1.losses).show();;
+                    // Hide start button
+                    $startButton.hide();
+
+
+                    
+
+
 
                 }
             } else {
@@ -180,6 +188,10 @@ $(document).ready(function () {
 
                 // Show text "Waiting for Player 1"
                 $(".waiting-player-1 ").show();
+                // Hide start button
+                $startButton.hide();
+
+
             }
 
             // Check if player2 exists in Firebase
@@ -214,9 +226,14 @@ $(document).ready(function () {
                         $(".waiting-player-1 ").show();
                         $(".waiting-player-2 ").hide();
 
-                        $(".player-stat-2").text("Wins: " + player2.wins + " | Losses: " + player2.losses + " | Ties: " + player2.ties).show();;
-                    }
+                        $(".player-stat-2").text("Wins: " + player2.wins + " | Losses: " + player2.losses).show();;
+                        // Hide start button
+                        $startButton.hide();
+
+               
+                    };
                 }
+
             } else {
                 // No player2 exist
                 player2 = null;
@@ -224,6 +241,9 @@ $(document).ready(function () {
 
                 // Show text "Waiting for Player 2"
                 $(".waiting-player-2 ").show();
+                // Hide start button
+                $startButton.hide();
+
             }
 
 
@@ -237,12 +257,9 @@ $(document).ready(function () {
                 $(".waiting-player-1 ").hide();
                 $(".waiting-player-2 ").hide();
 
-                // Set box background for Player1 & Player 2 to default
-                boxBackgroundDefault();
 
-                // Display start button
+                // Start round
                 $startButton.show();
-
 
                 // check if the user is player1 or player2
                 if (currentPlayerName === player1name) {
@@ -254,6 +271,8 @@ $(document).ready(function () {
                     // Customize greeting
                     $greeting.text("The game has started. You're Player 1, " + player1name + "!");
 
+
+
                 } else if (currentPlayerName === player2name) {
                     // The user is player2.
                     // Save local player equalto player2 & local opponent equal player1.
@@ -262,6 +281,7 @@ $(document).ready(function () {
                     currentPlayerNumber = player2number;
                     // Customize greeting
                     $greeting.text("The game has started. You're Player 2, " + player2name + "!");
+
 
                 } else {
                     // If the user is not one of the current players.
@@ -272,12 +292,10 @@ $(document).ready(function () {
                 }
             }
         });
+        // --------------------------------------------------------------
 
-
-
-
-        //==========================================================
         // Listen for change in wins, losses, and ties for player1
+        // --------------------------------------------------------------
         database.ref("/players/1/").on('child_changed', function (childSnapshot) {
 
             console.log("player1 childshapshot.key", childSnapshot.key);
@@ -291,11 +309,16 @@ $(document).ready(function () {
             }
             // Update score display
             if (wins1 !== undefined) {
-                $(".player-stat-1").text("Wins: " + wins1 + " | Losses: " + losses1 + " | Ties: " + ties1);
+                $(".player-stat-1").text("Wins: " + wins1 + " | Losses: " + losses1);
             }
         });
 
+
+
+        // --------------------------------------------------------------
+
         // Listen for change in wins, losses, and ties for player2
+        // --------------------------------------------------------------
         database.ref("/players/2/").on('child_changed', function (childSnapshot) {
             console.log("player2 childshapshot.key"
                 , childSnapshot.key);
@@ -308,13 +331,13 @@ $(document).ready(function () {
             }
             // Update score display
             if (wins1 !== undefined) {
-                $(".player-stat-1").text("Wins: " + wins2 + " | Losses: " + losses2 + " | Ties: " + ties2);
+                $(".player-stat-1").text("Wins: " + wins2 + " | Losses: " + losses2);
             }
         });
+        // --------------------------------------------------------------
 
-        // ========================================================
         // Attach a listener to players's turn to listen for any changes
-        // ========================================================
+        // --------------------------------------------------------------
         database.ref("/turn/").on('value', function (snapshot) {
             if (snapshot.child("/game/").val() === 'start') {
 
@@ -414,32 +437,18 @@ $(document).ready(function () {
                 return false
             }
         });
+        // --------------------------------------------------------------
+
+
     }; // End function listeners();
 
 
-
-    // --------------------------------------------------------------
-    // Only at the initial load get a snapshot of the stored data.
-    // .once listens for exactly one event of the specified event type, and then stops listening.
-
-
-
-    // ----------------------------------------------------------------
-    // Ongoing event listening if Player1 & Player2 exist and display message
-    // ----------------------------------------------------------------
-
-
-
-
-
-
-    //==========================================================
-
+    //===============================================================
     // Click events for to set choice for Rock, Paper, Scissors
     // ==============================================================
     // Player 1 
     // --------------------------------------------------------------
-    $(document).on( "click", ".player-choices-1",function (e) {
+    $(document).on("click", ".player-choices-1", function (e) {
         e.preventDefault();
         choice1 = $(this).attr("data-choice");
         choice1Text = $(this).attr("data-text");
@@ -470,7 +479,7 @@ $(document).ready(function () {
         database.ref().child("/players/2/").update({
             choice: choice2Text,
         });
-        
+
         database.ref().child("/turn/").update({
             game: 'result',
             player: '',
@@ -501,6 +510,7 @@ $(document).ready(function () {
         });
         logic();
     };
+    // --------------------------------------------------------------
 
     function logic() {
         // Review choices and find a winner
@@ -529,12 +539,13 @@ $(document).ready(function () {
             }
         }
     };
+    // --------------------------------------------------------------
 
     function winner(playerNumber) {
         var results;
 
         if (playerNumber == 0) {
-            results = 'Tie!';
+            results = "It's a Tie!";
         } else {
             results = "Player " + playerNumber + " Wins!"
 
@@ -565,165 +576,25 @@ $(document).ready(function () {
         //Display results
         window.setTimeout(function () {
             boxBackgroundHighlightCenter();
+            $startButton.hide();
             $(".winner-announcement").text(results).show();
         }, 500)
 
         window.setTimeout(function () {
             boxBackgroundDefault();
+            $startButton.hide();
             $(".winner-announcement").text('').hide();
-        }, 500)
+        }, 4000)
         window.setTimeout(function () {
             database.ref("/turn/").set({
                 // Reset turn to start
-                'turn': 'start',
-            })
-        }, 2000)
-    };
-
-    /* function getWinner() {
-        database.ref("/players/").on('value', function (snapshot) {
-            var choice1 = snapshot.child("/1/choice/").val()
-            var choice2 = snapshot.child("/2/choice/").val()
-            console.log("choice1: " + choice1 + ", choice2: " + choice2)
-     
-            // Hide R, P, S
-            $(".player-choices-1").hide();
-            $(".player-choices-2").hide();
-     
-            // Show what each player has selected
-            $('.player-select-1').text(choice1).show();
-            $('.player-select-2').text(choice2).show();
-     
-            // Highligh the center infomation area
-            boxBackgroundHighlightCenter();
-            $startButton.hide();
-            $turnSignal.hide();
-     
-            // If both player select the same choice. It's a tie!
-            if (choice1 === choice2) {
-     
-                // It's a tie!
-                // Listen for ties1 number on the database
-                database.ref("/players/1/ties/").once('value', function (snapshot) {
-                    var ties1Number = snapshot.val();
-                    console.log(ties1Number, "current ties1 number");
-                    // Increment  ties
-                    ties1Number++;
-                    database.ref("/players/1/ties/").set(ties1Number);
-                });
-     
-                // Listen for ties1 number on the database
-                database.ref("/players/2/ties/").once('value', function (snapshot) {
-                    var ties2Number = snapshot.val();
-                    console.log(ties2Number, "current ties2 number");
-                    // Increment  ties
-                    ties2Number++;
-                    database.ref("/players/2/ties/").set(ties2Number);
-                    return false;
-                });
-     
-                // Display the winner on HTML
-                $startButton.hide();
-                $turnSignal.text("").hide();
-                $winner.text("It's a tie!").show();
-                return false;
-            };
-     
-            if (choice1 === 'rock' && choice2 === 'paper') { recordWin('2', '1'); }
-            if (choice1 === 'rock' && choice2 === 'scissors') { recordWin('1', '2'); }
-            if (choice1 === 'paper' && choice2 === 'rock') { recordWin('1', '2'); }
-            if (choice1 === 'paper' && choice2 === 'scissors') { recordWin('2', '1'); }
-            if (choice1 === 'scissors' && choice2 === 'paper') { recordWin('1', '2'); }
-            if (choice1 === 'scissors' && choice2 === 'rock') { recordWin('2', '1'); }
-        });
-     
-     
-        // Wait for 5 seconds then start the next game round
-        setTimeout(function () {
-            firebase.database().ref("/turn/").set({
                 game: 'start',
                 player: player1name
-            });
-            return false;
-        }, 5000);
-        return false;
+            })
+            $startButton.hide();
+        }, 4000)
     };
-     
-    function recordTie() {
-     
-     
-        return false;
-    };
-     
-     
-    function recordWin(winner, loser) {
-        console.log(winner + " is a winner. " + loser + " is a loser");
-     
-        if (winner === '1') {
-     
-            // Listen for wins1 number on the database
-            database.ref("/players/1/wins/").once('value', function (snapshot) {
-                var wins1Number = snapshot.val();
-                // Increment wins
-                wins1Number++;
-                database.ref("/players/1/").update({
-                    choice: '',
-                    wins: wins1Number,
-                })
-            });
-     
-            // Listen for losses2 number on the database
-            database.ref("/players/2/lossess/").once('value', function (snapshot) {
-                var losses2Number = snapshot.val();
-     
-                // Increment lossess
-                losses2Number++;
-                database.ref("/players/2/").update({
-                    choice: '',
-                    losses: losses2Number,
-                })
-            });
-        } else if (winner === '2') {
-            // Listen for wins2 number on the database
-            database.ref("/players/2/wins/").once('value', function (snapshot) {
-                var wins2Number = snapshot.val();
-                // Increment wins
-                wins2Number++;
-                database.ref("/players/2/").update({
-                    choice: '',
-                    wins: wins2Number,
-                })
-            });
-     
-            // Listen for losses1 number on the database
-            database.ref("/players/1/lossess/").once('value', function (snapshot) {
-                var losses1Number = snapshot.val();
-     
-                // Increment lossess
-                losses1Number++;
-                database.ref("/players/1/").update({
-                    choice: '',
-                    losses: losses1Number,
-                })
-            });
-     
-        } else {
-            return false;
-        }
-     
-     
-        $startButton.hide();
-        $turnSignal.hide();
-        $winner.text("The winner is Player " + winner + ".").show();
-     
-    }; */
-
-
-    // =============================================================
-    // Function to handler clicks
-    // =============================================================
-
-
+    // --------------------------------------------------------------
 
 
     // =============================================================
@@ -731,6 +602,7 @@ $(document).ready(function () {
     // =============================================================
 
     // Function to toggle box background color
+    // --------------------------------------------------------------
     function boxBackgroundDefault() {
         $(".player1-box").removeClass("has-background-primary has-text-white");
         $(".player2-box").removeClass("has-background-primary has-text-white");
@@ -754,17 +626,14 @@ $(document).ready(function () {
         $(".player2-box").removeClass("has-background-primary has-text-white");
         $(".center-game-result").addClass("has-background-primary has-text-white");
     };
-
-
-
-
+    // --------------------------------------------------------------
 
     // Close notification
+    // --------------------------------------------------------------
     $("#close-notification").on("click", function () {
         console.log("You close the notification");
         $("#game-notification").hide();
     })
-
 
     // ==============================================================
     // Function to handle chat
@@ -786,16 +655,19 @@ $(document).ready(function () {
         scrollToBottom();
 
     });
-
+    // --------------------------------------------------------------
 
     // Disable 'enter' key from reloading a page
+    // --------------------------------------------------------------
     $("#chat-input").keypress(function (e) {
         if (e.which == 13) {
             e.preventDefault();
         }
     });
+    // --------------------------------------------------------------
 
     // Database listening function for  database.ref("/chat/").
+    // --------------------------------------------------------------
     database.ref("/chat/").on('child_added', function (snapshot) {
         var chatMessage = snapshot.val();
 
@@ -809,8 +681,10 @@ $(document).ready(function () {
             scrollToBottom();
         }
     });
+    // --------------------------------------------------------------
 
     // Attach a listener that detects user disconnection events
+    // --------------------------------------------------------------
     database.ref("/players/").on("child_removed", function (snapshot) {
 
         // Send a message to chat 
@@ -830,28 +704,33 @@ $(document).ready(function () {
         // Signal turn to stop
         database.ref().child("/turn/").set('stop');
     });
+    // --------------------------------------------------------------
 
     // Find out when the content of the textarea changes 
     // Scroll to the bottom of the chat box
     $(".chat-display").change(function () {
         scrollToBottom();
     });
+    // --------------------------------------------------------------
 
     // Function to scroll to the bottom of the chat box
     var messages = $('.chat-display');
     function scrollToBottom() {
         messages[0].scrollTop = messages[0].scrollHeight;
     };
-
-    scrollToBottom();
+    // --------------------------------------------------------------
 
     // Prevent typing in chat box
     $(".chat-display").keypress(function (e) {
         e.preventDefault();
     });
+    // --------------------------------------------------------------
 
 
-
+    // Start game
     listeners();
+
+    // Scroll to the bottom of the chat box
+    scrollToBottom();
 
 }); // End $(document).ready(function(){}

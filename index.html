@@ -50,7 +50,8 @@
                 <div id="game-notification" class="notification is-primary">
                     <button id="close-notification" class="delete"></button>
                     <!-- Game's Message to the Player -->
-                    <p id="game-notification-message">Welcome to Rock-Paper-Scissors. Just like when we play this game at
+                    <p id="game-notification-message">Welcome to Rock-Paper-Scissors. Just like when we play this game
+                        at
                         the playground, you won't be able to play it alone. So, be sure to grab a friend (or a second
                         browser tab!). </p>
                 </div>
@@ -68,21 +69,25 @@
                             <!-- Rock, Paper, Scissors for Player 1 -->
                             <div data-choice="r" data-text="rock" role="button" class="player-choices-1 is-mobile button is-outlined is-large">
                                 <figure class="icon is-square">
-                                    <img data-choice="r" data-text="rock" role="button" class="player-choices-1" src="assets/images/icon-rock.png" alt="rock">
+                                    <img data-choice="r" data-text="rock" role="button" class="player-choices-1" src="assets/images/icon-rock.png"
+                                        alt="rock">
                                 </figure>
                                 <span data-choice="r" data-text="rock" role="button" class="player-choices-1"> Rock</span>
                             </div>
                             <div data-choice="p" data-text="paper" role="button" class="player-choices player-choices-1 is-mobile button is-outlined is-large">
                                 <figure class="icon is-square">
-                                    <img data-choice="p" data-text="paper" role="button" class="player-choices-1" src="assets/images/icon-paper.png" alt="paper">
+                                    <img data-choice="p" data-text="paper" role="button" class="player-choices-1" src="assets/images/icon-paper.png"
+                                        alt="paper">
                                 </figure>
                                 <span data-choice="p" data-text="paper" role="button" class="player-choices-1"> Paper</span>
                             </div>
                             <div data-choice="s" data-text="scissors" role="button" class="player-choices player-choices-1 is-mobile button is-outlined is-large">
                                 <figure class="icon is-square">
-                                    <img data-choice="s" data-text="scissors" role="button" class="player-choices-1" src="assets/images/icon-scissors.png" alt="scissors">
+                                    <img data-choice="s" data-text="scissors" role="button" class="player-choices-1"
+                                        src="assets/images/icon-scissors.png" alt="scissors">
                                 </figure>
-                                <span data-choice="s" data-text="scissors" role="button" class="player-choices-1"> Scissors</span>
+                                <span data-choice="s" data-text="scissors" role="button" class="player-choices-1">
+                                    Scissors</span>
                             </div>
                         </div>
                         <p class="player-select-1 subtitle has-text-centered has-text-primary is-uppercase is-size-3">
@@ -97,15 +102,17 @@
                 <div class="column">
                     <!-- Second column -->
                     <div class="box center-game-result">
-                            <!-- Game Status Display in the center -->
-                            <a id="start-game" class="button is-large is-fullwidth is-info is-rounded"> Start!</a>
+                        <!-- Game Status Display in the center -->
+                        <a id="start-game" class="button is-large is-fullwidth is-info is-rounded"> Start!</a>
+                        <div>
                             <p class="turn subtitle">
                                 <!-- Turn Message for Player 1  -->
                             </p>
-                            <p class="winner title">
+                            <p class="winner-announcement title">
                                 <!-- The Winner is :  -->
                             </p>
-                        
+                        </div>
+
                     </div>
                 </div>
                 <div class="column">
@@ -119,21 +126,25 @@
                             <!-- Rock, Paper, Scissors for Player 2 -->
                             <div data-choice="r" data-text="rock" role="button" class="player-choices-2 is-mobile button is-outlined is-large">
                                 <figure class="icon is-square">
-                                    <img data-choice="r" data-text="rock" role="button" class="player-choices-2" src="assets/images/icon-rock.png" alt="rock">
+                                    <img data-choice="r" data-text="rock" role="button" class="player-choices-2" src="assets/images/icon-rock.png"
+                                        alt="rock">
                                 </figure>
                                 <span data-choice="r" data-text="rock" role="button" class="player-choices-2"> Rock</span>
                             </div>
                             <div data-choice="p" data-text="paper" role="button" class="player-choices player-choices-2 is-mobile button is-outlined is-large">
                                 <figure class="icon is-square">
-                                    <img data-choice="p" data-text="paper" role="button" class="player-choices-2" src="assets/images/icon-paper.png" alt="paper">
+                                    <img data-choice="p" data-text="paper" role="button" class="player-choices-2" src="assets/images/icon-paper.png"
+                                        alt="paper">
                                 </figure>
                                 <span data-choice="p" data-text="paper" role="button" class="player-choices-2"> Paper</span>
                             </div>
                             <div data-choice="s" data-text="scissors" role="button" class="player-choices-2 is-mobile button is-outlined is-large">
                                 <figure class="icon is-square">
-                                    <img data-choice="s" data-text="scissors" role="button" class="player-choices-2" src="assets/images/icon-scissors.png" alt="scissors">
+                                    <img data-choice="s" data-text="scissors" role="button" class="player-choices-2"
+                                        src="assets/images/icon-scissors.png" alt="scissors">
                                 </figure>
-                                <span data-choice="s" data-text="scissors" role="button" class="player-choices-2"> Scissors</span>
+                                <span data-choice="s" data-text="scissors" role="button" class="player-choices-2">
+                                    Scissors</span>
                             </div>
                             <!-- End Rock, Paper, Scissors for Player 2 -->
                         </div>
@@ -176,11 +187,9 @@
 
 
     <!-- Link jQuery -->
-    <script
-  src="https://code.jquery.com/jquery-3.3.1.js"
-  integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
-  crossorigin="anonymous"></script>
-     <!-- Link Moment.js -->
+    <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+        crossorigin="anonymous"></script>
+    <!-- Link Moment.js -->
     <script src="https://cdn.jsdelivr.net/momentjs/2.12.0/moment.min.js"></script>
     <!-- Link Firebase -->
     <script src="https://www.gstatic.com/firebasejs/5.5.1/firebase-app.js"></script>
