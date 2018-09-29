@@ -428,8 +428,13 @@ $(document).ready(function () {
 
             } else if (snapshot.child("/game/").val() === 'result') {
                 boxBackgroundHighlightCenter();
+
+                $(".player-choices-1").hide();
+                $(".player-choices-2").hide();
+
                 $(".player-select-1").text("You have selected.").show();
                 $(".player-select-2").text("You have selected.").show();
+
 
                 // calculate outcome
                 outcome();
@@ -516,32 +521,32 @@ $(document).ready(function () {
         // Review choices and find a winner
 
         if (choice1 === choice2) {
-            winner(0);
+            winner(0, choice1, choice2);
         } else if (choice1 == 'rock') {
             if (choice2 == 'paper') {
-                winner(2);
+                winner(2, choice1, choice2);
             } else if (choice2 == 'scissors') {
-                winner(1);
+                winner(1, choice1, choice2);
             }
 
         } else if (choice1 == 'paper') {
             if (choice2 == 'rock') {
-                winner(1);
+                winner(1, choice1, choice2);
             } else if (choice2 == 'scissors') {
-                winner(2);
+                winner(2, choice1, choice2);
             }
 
         } else if (choice1 == 'scissors') {
             if (choice2 == 'rock') {
-                winner(2);
+                winner(2, choice1, choice2);
             } else if (choice2 == 'paper') {
-                winner(1);
+                winner(1, choice1, choice2);
             }
         }
     };
     // --------------------------------------------------------------
 
-    function winner(playerNumber) {
+    function winner(playerNumber, choice1, choice2) {
         var results;
 
         if (playerNumber == 0) {
@@ -577,6 +582,15 @@ $(document).ready(function () {
         window.setTimeout(function () {
             boxBackgroundHighlightCenter();
             $startButton.hide();
+
+
+            $(".player-choices-1").hide();
+            $(".player-choices-2").hide();
+
+            $(".player-select-1").text(choice1).show();
+            $(".player-select-2").text(choice2).show();
+
+
             $(".winner-announcement").text(results).show();
         }, 500)
 
@@ -584,7 +598,9 @@ $(document).ready(function () {
             boxBackgroundDefault();
             $startButton.hide();
             $(".winner-announcement").text('').hide();
-        }, 4000)
+            $(".player-select-1").text('').hide();
+            $(".player-select-2").text('').hide();
+        }, 3000)
         window.setTimeout(function () {
             database.ref("/turn/").set({
                 // Reset turn to start
@@ -592,7 +608,7 @@ $(document).ready(function () {
                 player: player1name
             })
             $startButton.hide();
-        }, 4000)
+        }, 3000)
     };
     // --------------------------------------------------------------
 

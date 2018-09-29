@@ -46,7 +46,7 @@
     <section class="section level is-marginless">
         <div class="container">
 
-            <div class="column is-three-fifths is-offset-one-fifth">
+            <div class="column is-three-fifths is-offset-one-fifth is-mobile">
                 <div id="game-notification" class="notification is-primary">
                     <button id="close-notification" class="delete"></button>
                     <!-- Game's Message to the Player -->
@@ -57,31 +57,31 @@
                 </div>
             </div>
 
-            <div class="columns">
+            <div class="columns is-mobile">
                 <div class="column">
                     <!-- First column -->
                     <div class="player1-box box">
-                        <p class="player-name-1 title">
+                        <p class="player-name-1 subtitle">
                             <!-- Player 1's Name -->
                         </p>
                         <p class="waiting waiting-player-1 subtitle">Waiting for Player 1</p>
                         <div id="selection-1" class="column is-6">
                             <!-- Rock, Paper, Scissors for Player 1 -->
-                            <div data-choice="r" data-text="rock" role="button" class="player-choices-1 is-mobile button is-outlined is-large">
+                            <div data-choice="r" data-text="rock" role="button" class="player-choices-1 is-mobile button is-outlined is-small">
                                 <figure class="icon is-square">
                                     <img data-choice="r" data-text="rock" role="button" class="player-choices-1" src="assets/images/icon-rock.png"
                                         alt="rock">
                                 </figure>
                                 <span data-choice="r" data-text="rock" role="button" class="player-choices-1"> Rock</span>
                             </div>
-                            <div data-choice="p" data-text="paper" role="button" class="player-choices player-choices-1 is-mobile button is-outlined is-large">
+                            <div data-choice="p" data-text="paper" role="button" class="player-choices player-choices-1 is-mobile button is-outlined is-small">
                                 <figure class="icon is-square">
                                     <img data-choice="p" data-text="paper" role="button" class="player-choices-1" src="assets/images/icon-paper.png"
                                         alt="paper">
                                 </figure>
                                 <span data-choice="p" data-text="paper" role="button" class="player-choices-1"> Paper</span>
                             </div>
-                            <div data-choice="s" data-text="scissors" role="button" class="player-choices player-choices-1 is-mobile button is-outlined is-large">
+                            <div data-choice="s" data-text="scissors" role="button" class="player-choices player-choices-1 is-mobile button is-outlined is-small">
                                 <figure class="icon is-square">
                                     <img data-choice="s" data-text="scissors" role="button" class="player-choices-1"
                                         src="assets/images/icon-scissors.png" alt="scissors">
@@ -90,7 +90,7 @@
                                     Scissors</span>
                             </div>
                         </div>
-                        <p class="player-select-1 subtitle has-text-centered has-text-primary is-uppercase is-size-3">
+                        <p class="player-select-1 subtitle has-text-centered has-text-primary is-capitalized">
                             <!-- Player 1's selected choices (Rock/ Paper/ Scissors) -->
                         </p>
                         <p class="player-stat-1 subtitle has-text-grey-dark">
@@ -103,7 +103,7 @@
                     <!-- Second column -->
                     <div class="box center-game-result">
                         <!-- Game Status Display in the center -->
-                        <a id="start-game" class="button is-large is-fullwidth is-info is-rounded"> Start!</a>
+                        <a id="start-game" class="button is-small is-info is-rounded"> Start!</a>
                         <div>
                             <p class="turn subtitle">
                                 <!-- Turn Message for Player 1  -->
@@ -118,27 +118,27 @@
                 <div class="column">
                     <!-- Third column -->
                     <div class="player2-box box">
-                        <p class="player-name-2 title">
+                        <p class="player-name-2 subtitle">
                             <!-- Player 2's Name -->
                         </p>
                         <p class="waiting waiting-player-2 subtitle">Waiting for Player 2</p>
                         <div id="selection-2" class="column is-6">
                             <!-- Rock, Paper, Scissors for Player 2 -->
-                            <div data-choice="r" data-text="rock" role="button" class="player-choices-2 is-mobile button is-outlined is-large">
+                            <div data-choice="r" data-text="rock" role="button" class="player-choices-2 is-mobile button is-outlined is-small">
                                 <figure class="icon is-square">
                                     <img data-choice="r" data-text="rock" role="button" class="player-choices-2" src="assets/images/icon-rock.png"
                                         alt="rock">
                                 </figure>
                                 <span data-choice="r" data-text="rock" role="button" class="player-choices-2"> Rock</span>
                             </div>
-                            <div data-choice="p" data-text="paper" role="button" class="player-choices player-choices-2 is-mobile button is-outlined is-large">
+                            <div data-choice="p" data-text="paper" role="button" class="player-choices player-choices-2 is-mobile button is-outlined is-small">
                                 <figure class="icon is-square">
                                     <img data-choice="p" data-text="paper" role="button" class="player-choices-2" src="assets/images/icon-paper.png"
                                         alt="paper">
                                 </figure>
                                 <span data-choice="p" data-text="paper" role="button" class="player-choices-2"> Paper</span>
                             </div>
-                            <div data-choice="s" data-text="scissors" role="button" class="player-choices-2 is-mobile button is-outlined is-large">
+                            <div data-choice="s" data-text="scissors" role="button" class="player-choices-2 is-mobile button is-outlined is-small">
                                 <figure class="icon is-square">
                                     <img data-choice="s" data-text="scissors" role="button" class="player-choices-2"
                                         src="assets/images/icon-scissors.png" alt="scissors">
@@ -148,7 +148,7 @@
                             </div>
                             <!-- End Rock, Paper, Scissors for Player 2 -->
                         </div>
-                        <p id="player-select-2" class="player-select subtitle has-text-centered has-text-primary is-uppercase is-size-3">
+                        <p id="player-select-2" class="player-select subtitle has-text-centered has-text-primary is-uppercase">
                             <!-- Player 2's selected choices (Rock/ Paper/ Scissors) -->
                         </p>
                         <p class="player-game-result-2 subtitie has-text-centered has-text-grey-dark">
@@ -162,7 +162,7 @@
 
             </div>
             <!-- Chat Box -->
-            <div id="chat-box" class="column is-three-fifths is-offset-one-fifth">
+            <div id="chat-box" class="column is-three-fifths is-offset-one-fifth is-mobile">
                 <div class="field">
                     <form class="control" action="#" method="post">
                         <textarea class="chat-display textarea is-primary" type="text" placeholder="" autofocus></textarea>
