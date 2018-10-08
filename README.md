@@ -5,14 +5,16 @@ Welcome to Rock-Paper-Scissors Multiplayer! Just like when we play this game at 
 ---
 ## User Story
 ![Show choices to Player 1](./assets/screenshots/screenshot-showplayer1choices.png)
-* Only two users can play at the same time. Both players pick either rock, paper or scissors. Player 1 will make a decision first.
+* Only two users can play at the same time. 
+* Once both users are connected to `firebase`, one of the user can _click a start button_ to start their first game. 
+* Both players pick either rock, paper or scissors. Player 1 will make a decision first. 
 
 ![Show choices to Player 2](./assets/screenshots/screenshot-showplayer2choices.png)
 *  After Player 1 has selected, `firebase` will store Player 1's choice on the database. Then, Player 2 could make a decision.
 
 ![Annouce a winner](./assets/screenshots/screenshot-annoucewinner.png)
 * After the players make their selection, the game will tell them whether a tie occurred or if one player defeated the other.
-* The game will track each player's wins and losses, and automatically start a next round in a few seconds.
+* The game will reveal each player's selected choice, track each player's wins and losses, and automatically start a next round in a few seconds.
 
 ---
 ##  Technical Approach
