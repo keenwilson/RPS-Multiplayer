@@ -4,11 +4,11 @@
 Welcome to Rock-Paper-Scissors Multiplayer! Just like when we play this game at the playground, you won't be able to play it alone. So, be sure to grab a friend (or a second browser tab!). [Click to Play](https://keenwilson.github.io/RPS-Multiplayer/ "Rock-Paper-Scissors Multiplayer")
 ---
 
-![Show Choices to Player 1](https://github.com/keenwilson/RPS-Multiplayer/assets/screenshots/screenshot-showplayer1choices.png)
+![Show Choices to Player 1](./assets/screenshots/screenshot-showplayer1choices.png)
 
-![Show Choices to Player 2](https://github.com/keenwilson/RPS-Multiplayer/assets/screenshots/screenshot-showplayer2choices.png)
+![Show Choices to Player 2](./assets/screenshots/screenshot-showplayer2choices.png)
 
-![Show Choices to Player 2](https://github.com/keenwilson/RPS-Multiplayer/assets/screenshots/screenshot-annoucewinner.png)
+![Show Choices to Player 2](./assets/screenshots/screenshot-annoucewinner.png)
 
 ##  Technical Approach
 This app utilizes the concept of data-persistence and simple server-side (Firebase) approaches for storing data using `firebase.database.Reference` methods such as  `child`, `on`, `once`, `onDisconnect`, `set`, and `update`. 
