@@ -56,7 +56,7 @@ $(document).ready(function () {
     var $turnSignal = $(".turn");
     var $winner = $(".winner-announcement");
 
-    
+
 
     function listeners() {
 
@@ -114,11 +114,8 @@ $(document).ready(function () {
                 playerConnected = database.ref("/players/").child(player.number);
                 // Send your player info (name/ local wins/ local losses/ local turns to the database)
                 playerConnected.set(player);
-                // Remove user from the connection list when they disconnect.
+                // Remove user from the connection list if they close browser or refresh
                 database.ref("/players/").child(player.number).onDisconnect().remove();
-
-                
-
             } else {
                 // If 1 and 2 were taken, your number is still 0.
                 // Disconnect from Firebase.
@@ -176,10 +173,6 @@ $(document).ready(function () {
                     $startButton.hide();
 
 
-                    
-
-
-
                 }
             } else {
                 // No player1 exist
@@ -190,8 +183,6 @@ $(document).ready(function () {
                 $(".waiting-player-1 ").show();
                 // Hide start button
                 $startButton.hide();
-
-
             }
 
             // Check if player2 exists in Firebase
@@ -209,6 +200,8 @@ $(document).ready(function () {
 
                     // Hide start button
                     $startButton.hide();
+
+
 
                 } else {
                     // Only execute if the database already has player1
@@ -229,8 +222,6 @@ $(document).ready(function () {
                         $(".player-stat-2").text("Wins: " + player2.wins + " | Losses: " + player2.losses).show();;
                         // Hide start button
                         $startButton.hide();
-
-               
                     };
                 }
 
@@ -243,7 +234,6 @@ $(document).ready(function () {
                 $(".waiting-player-2 ").show();
                 // Hide start button
                 $startButton.hide();
-
             }
 
 
@@ -259,7 +249,7 @@ $(document).ready(function () {
 
 
                 // Start round
-                $startButton.show();
+                //$startButton.show();
 
                 // check if the user is player1 or player2
                 if (currentPlayerName === player1name) {
@@ -270,6 +260,11 @@ $(document).ready(function () {
                     currentPlayerNumber = player1number;
                     // Customize greeting
                     $greeting.text("The game has started. You're Player 1, " + player1name + "!");
+
+                    // Notice the connection of player1
+                    database.ref("/connections").child("player1").set("on")
+                    // Remove user from the connection list if they close browser or refresh
+                    database.ref("/connections").child("player1").onDisconnect().remove();
 
 
 
@@ -282,6 +277,11 @@ $(document).ready(function () {
                     // Customize greeting
                     $greeting.text("The game has started. You're Player 2, " + player2name + "!");
 
+                    // Notice the connection of player2
+                    database.ref("/connections").child("player2").set("on")
+                    // Remove user from the connection list if they close browser or refresh
+                    database.ref("/connections").child("player2").onDisconnect().remove();
+
 
                 } else {
                     // If the user is not one of the current players.
@@ -293,6 +293,35 @@ $(document).ready(function () {
             }
         });
         // --------------------------------------------------------------
+
+        //  Listen for the connections of both players in order to start a game
+              database.ref("/connections/").on("value", function (shapshot){
+                 console.log("/connections/ shapshot.val()", shapshot.val());
+     
+                 if ((shapshot.child("player1").exists()) && (shapshot.child("player2").exists())) {
+                     // Start round
+                    gameCanStart = true;
+                    $startButton.show()
+                 } else {
+                    gameCanStart = false;
+                    $startButton.hide()
+                 }
+     
+             }); 
+
+        // Listen for gameCanstart
+        database.ref("/turn/").on("value", function (shapshot) {
+            console.log("/turn/ shapshot.val()", shapshot.val());
+            if ((shapshot.val() === "waiting") && (gameCanStart = true)) {
+                $startButton.show()
+            } else {
+                $startButton.hide()
+            }
+
+        });
+
+
+
 
         // Listen for change in wins, losses, and ties for player1
         // --------------------------------------------------------------
@@ -600,7 +629,7 @@ $(document).ready(function () {
             $(".winner-announcement").text('').hide();
             $("#player-select-1").text('').hide();
             $("#player-select-2").text('').hide();
-        }, 3000)
+        }, 10000)
         window.setTimeout(function () {
             database.ref("/turn/").set({
                 // Reset turn to start
@@ -608,7 +637,7 @@ $(document).ready(function () {
                 player: player1name
             })
             $startButton.hide();
-        }, 3000)
+        }, 10000)
     };
     // --------------------------------------------------------------
 
@@ -673,11 +702,13 @@ $(document).ready(function () {
     });
     // --------------------------------------------------------------
 
-    // Disable 'enter' key from reloading a page
+    // Make the chat work on the enter 
     // --------------------------------------------------------------
-    $("#chat-input").keypress(function (e) {
+    $("#chat-input").keypress(function () {
+
         if (e.which == 13) {
-            e.preventDefault();
+            $("#send-chat").click();
+            return false;
         }
     });
     // --------------------------------------------------------------
