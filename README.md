@@ -20,7 +20,7 @@
 This app utilizes the concept of data-persistence and simple server-side (Firebase) approaches for storing data using `firebase.database.Reference` methods such as  `child`, `on`, `once`, `onDisconnect`, `set`, and `update`. 
 
 ### How this app is built
-* Created an online _two-player Rock-Paper-Scissors_ game with the help of _Firebase_ to store and sync data between users and devices in realtime using **_a cloud-hosted, NoSQL database_**. 
+* Created an online _two-player Rock-Paper-Scissors_ game with the help of _Firebase_ to store and sync data between users and devices in realtime using `a cloud-hosted, NoSQL database`. 
 * Utilized  `JavaScript` to build game logic and display results.
 * Use  `Bulma CSS framework` to make development lifecycle faster and easier. 
 * This app comes with chat functionality that users can send texts and see if the opponent has disconnected.
