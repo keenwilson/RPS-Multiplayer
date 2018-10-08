@@ -1,5 +1,6 @@
 # RPS-Multiplayer
----
+
+
 Welcome to Rock-Paper-Scissors Multiplayer! Just like when we play this game at the playground, you won't be able to play it alone. So, be sure to grab a friend (or a second browser tab!). [Click to Play](https://keenwilson.github.io/RPS-Multiplayer/ "Rock-Paper-Scissors Multiplayer")
 ---
 
@@ -20,7 +21,9 @@ This app utilizes the concept of data-persistence and simple server-side (Fireba
 * The game will track each player's wins and losses.
 
 ---
+
 ## Author
-[Keen Wilson] (https://github.com/keenwilson/keenwilson.github.io "Keen Wilson's Portfolio")
----
+
+[Keen Wilson](https://github.com/keenwilson/keenwilson.github.io "Keen Wilson's Portfolio")
+
 

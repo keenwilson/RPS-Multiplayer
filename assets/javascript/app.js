@@ -629,7 +629,7 @@ $(document).ready(function () {
             $(".winner-announcement").text('').hide();
             $("#player-select-1").text('').hide();
             $("#player-select-2").text('').hide();
-        }, 10000)
+        }, 3000)
         window.setTimeout(function () {
             database.ref("/turn/").set({
                 // Reset turn to start
@@ -637,7 +637,7 @@ $(document).ready(function () {
                 player: player1name
             })
             $startButton.hide();
-        }, 10000)
+        }, 3000)
     };
     // --------------------------------------------------------------
 
@@ -708,7 +708,6 @@ $(document).ready(function () {
 
         if (e.which == 13) {
             $("#send-chat").click();
-            return false;
         }
     });
     // --------------------------------------------------------------
