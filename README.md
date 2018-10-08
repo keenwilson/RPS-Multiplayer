@@ -1,7 +1,6 @@
 # RPS-Multiplayer
 
-
-Welcome to Rock-Paper-Scissors Multiplayer! Just like when we play this game at the playground, you won't be able to play it alone. So, be sure to grab a friend (or a second browser tab!). [Click to Play](https://keenwilson.github.io/RPS-Multiplayer/ "Rock-Paper-Scissors Multiplayer")
+### Welcome to Rock-Paper-Scissors Multiplayer! Just like when we play this game at the playground, you won't be able to play it alone. So, be sure to grab a friend (or a second browser tab!). [Click to Play](https://keenwilson.github.io/RPS-Multiplayer/ "Rock-Paper-Scissors Multiplayer")
 ---
 ## User Story
 ![Show choices to Player 1](./assets/screenshots/screenshot-showplayer1choices.png)
